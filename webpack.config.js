@@ -1,10 +1,13 @@
 const path = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  mode: 'development',
-  entry: "./src/js/index.js",
+  mode: "development",
+  context: path.join(__dirname, "./src"),
+  entry: "./js/index.js",
   output: {
-    path: path.resolve(__dirname, "public/js"),
+    path: path.resolve(__dirname, "build"),
     filename: "bundle.js"
   },
   module: {
@@ -18,13 +21,13 @@ module.exports = {
             presets: ["@babel/preset-env"]
           }
         }
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader',
-        ],
-      },
+      }
     ]
-  }
+  },
+  plugins: [
+    new CopyWebpackPlugin([{ from: "assets" }]),
+    new HtmlWebpackPlugin({
+      template: "index.html"
+    })
+  ]
 };
