@@ -48,8 +48,8 @@ export default class Ship extends Drawable {
           this.x = this.canvasWidth - this.width;
       } else if (KeyboardController.KEY_STATUS.up) {
         this.y -= this.speed;
-        if (this.y <= (this.canvasHeight / 4) * 3)
-          this.y = (this.canvasHeight / 4) * 3;
+        if (this.y <= (this.canvasHeight / 4) * 2)
+          this.y = (this.canvasHeight / 4) * 2;
       } else if (KeyboardController.KEY_STATUS.down) {
         this.y += this.speed;
         if (this.y >= this.canvasHeight - this.height)
@@ -70,6 +70,7 @@ export default class Ship extends Drawable {
    * Fires two bullets
    */
   fire() {
-    this.bulletPool.getTwo(this.x + 6, this.y, 3, this.x + 33, this.y, 3);
+    // this.bulletPool.getTwo(this.x + 6, this.y, 3, this.x + 33, this.y, 3);
+    this.bulletPool.get(this.x + 19.5, this.y, 3);
   }
 }
