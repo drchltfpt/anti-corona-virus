@@ -8,16 +8,10 @@ import KeyboardController from "../controller/KeyboardController";
  * around the screen.
  */
 export default class Ship extends Drawable {
-  constructor(x, y, speed, width, height, canvasWidth, canvasHeight, context) {
-    super(x, y, speed, width, height);
-
-    this.speed = 3;
+  constructor(x, y, width, height) {
+    super(x, y, 3, width, height);
     this.bulletPool = new Pool(30);
     this.bulletPool.init();
-
-    this.context = context;
-    this.canvasWidth = canvasWidth;
-    this.canvasHeight = canvasHeight;
 
     this.counter = 0;
     this.fireRate = 15;

@@ -6,13 +6,11 @@
  */
 
 class Drawable {
-  constructor(x, y, speed, canvasWidth, canvasHeight, width, height) {
+  constructor(x, y, speed, width, height) {
     // Default variables
     this.x = x;
     this.y = y;
     this.speed = speed;
-    this.canvasWidth = canvasWidth;
-    this.canvasHeight = canvasHeight;
     this.width = width;
     this.height = height;
   }

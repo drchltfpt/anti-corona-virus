@@ -17,13 +17,13 @@ export default class Pool {
     let bullet;
     for (let i = 0; i < this.size; i++) {
       // Initalize the bullet object
-      bullet = new Bullet();
-      bullet.init(
+      bullet = new Bullet(
         0,
         0,
         ImageRepository.bullet.width,
         ImageRepository.bullet.height
       );
+
       this.pool.push(bullet);
     }
   }
@@ -33,8 +33,8 @@ export default class Pool {
    * pushes it to the front of the array.
    */
   get(x, y, speed) {
-    if (!this.pool[size - 1].alive) {
-      this.pool[size - 1].spawn(x, y, speed);
+    if (!this.pool[this.size - 1].alive) {
+      this.pool[this.size - 1].spawn(x, y, speed);
       this.pool.unshift(this.pool.pop());
     }
   }
@@ -44,7 +44,7 @@ export default class Pool {
    * fire and only have 1 bullet spawn instead of 2.
    */
   getTwo(x1, y1, speed1, x2, y2, speed2) {
-    if (!this.pool[size - 1].alive && !this.pool[size - 2].alive) {
+    if (!this.pool[this.size - 1].alive && !this.pool[this.size - 2].alive) {
       this.get(x1, y1, speed1);
       this.get(x2, y2, speed2);
     }
@@ -54,7 +54,7 @@ export default class Pool {
    * clears it and pushes it to the front of the array.
    */
   animate() {
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < this.size; i++) {
       // Only draw until we find a bullet that is not alive
       if (this.pool[i].alive) {
         if (this.pool[i].draw()) {

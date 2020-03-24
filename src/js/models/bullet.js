@@ -5,10 +5,9 @@ import ImageRepository from "../repos/ImageRepo";
  * drawn on the "main" canvas.
  */
 class Bullet extends Drawable {
-  constructor(x, y, speed, width, height, context) {
-    super(x, y, speed, width, height);
+  constructor(x, y, width, height) {
+    super(x, y, 0, width, height);
     this.alive = false; // Is true if the bullet is currently in use
-    this.context = context;
   }
 
   /*

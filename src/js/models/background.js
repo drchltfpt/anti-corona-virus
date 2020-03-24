@@ -6,14 +6,12 @@ import ImageRepository from "../repos/ImageRepo";
  * canvas and creates the illusion of moving by panning the image.
  */
 class Background extends Drawable {
-  constructor(x, y, speed, canvasWidth, canvasHeight, context) {
-    super(x, y, speed, canvasWidth, canvasHeight);
-    this.context = context;
+  constructor(x, y, speed) {
+    super(x, y, speed, 0, 0);
   }
   // Implement abstract function
   draw() {
     // Pan background
-    console.log(this.x, " ", this.y);
     this.y += this.speed;
     this.context.drawImage(ImageRepository.background, this.x, this.y);
 

@@ -17,6 +17,7 @@ class KeyboardController {
   }
 
   addEventListern() {
+    const self = this;
     /**
      * Sets up the document to listen to onkeydown events (fired when
      * any key on the keyboard is pressed down). When a key is pressed,
@@ -30,7 +31,7 @@ class KeyboardController {
       var keyCode = e.keyCode ? e.keyCode : e.charCode;
       if (KEY_CODES[keyCode]) {
         e.preventDefault();
-        KEY_STATUS[KEY_CODES[keyCode]] = true;
+        self.KEY_STATUS[KEY_CODES[keyCode]] = true;
       }
     };
 
@@ -44,7 +45,7 @@ class KeyboardController {
       var keyCode = e.keyCode ? e.keyCode : e.charCode;
       if (KEY_CODES[keyCode]) {
         e.preventDefault();
-        KEY_STATUS[KEY_CODES[keyCode]] = false;
+        self.KEY_STATUS[KEY_CODES[keyCode]] = false;
       }
     };
   }
