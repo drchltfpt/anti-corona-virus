@@ -1,4 +1,5 @@
-import * as ImageRepository from '../models/image-repository';
+import Drawable from "../interfaces/Drawable";
+import ImageRepository from "../repos/ImageRepo";
 /**
  * Creates the Bullet object which the ship fires. The bullets are
  * drawn on the "main" canvas.

@@ -1,6 +1,4 @@
-import Game from "./game";
-
-class App {
+export default class App {
   constructor(game) {
     this._game = game;
   }
@@ -17,9 +15,3 @@ class App {
     this._game.render();
   }
 }
-
-window.onload = () => {
-  let app = new App(new Game());
-
-  app.setup();
-};

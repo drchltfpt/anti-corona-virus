@@ -1,5 +1,5 @@
-import Drawable from '../interfaces/drawable-interface';
-import * as ImageRepository from '../models/image-repository';
+import Drawable from "../interfaces/Drawable";
+import ImageRepository from "../repos/ImageRepo";
 /**
  * Creates the Background object which will become a child of
  * the Drawable object. The background is drawn on the "background"
@@ -13,7 +13,7 @@ class Background extends Drawable {
   // Implement abstract function
   draw() {
     // Pan background
-    console.log(this.x, ' ', this.y)
+    console.log(this.x, " ", this.y);
     this.y += this.speed;
     this.context.drawImage(ImageRepository.background, this.x, this.y);
 
@@ -26,7 +26,7 @@ class Background extends Drawable {
 
     // If the image scrolled off the screen, reset
     if (this.y >= this.canvasHeight) this.y = 0;
-  };
+  }
 }
 
 export default Background;

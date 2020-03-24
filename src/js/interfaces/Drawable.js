@@ -18,7 +18,8 @@ class Drawable {
   }
 
   // Define abstract function to be implemented in child objects
-  draw() {};
+  draw() {}
+  move() {}
 }
 
 module.exports = Drawable;
