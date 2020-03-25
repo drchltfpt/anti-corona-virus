@@ -1,5 +1,5 @@
 import Drawable from "../interfaces/Drawable";
-import ImageRepository from "../repos/ImageRepo";
+import ImageRepo from "../repos/ImageRepo";
 /**
  * Creates the Background object which will become a child of
  * the Drawable object. The background is drawn on the "background"
@@ -13,11 +13,11 @@ class Background extends Drawable {
   draw() {
     // Pan background
     this.y += this.speed;
-    this.context.drawImage(ImageRepository.background, this.x, this.y);
+    this.context.drawImage(ImageRepo.background, this.x, this.y);
 
     // Draw another image at the top edge of the first image
     this.context.drawImage(
-      ImageRepository.background,
+      ImageRepo.background,
       this.x,
       this.y - this.canvasHeight
     );

@@ -13,10 +13,10 @@ class KeyboardController {
       this.KEY_STATUS[KEY_CODES[code]] = false;
     }
 
-    this.addEventListern();
+    this.addEventListen();
   }
 
-  addEventListern() {
+  addEventListen() {
     const self = this;
     /**
      * Sets up the document to listen to onkeydown events (fired when

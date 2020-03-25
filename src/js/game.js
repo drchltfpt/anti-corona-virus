@@ -1,6 +1,10 @@
 import Background from "./models/Background";
 import Ship from "./models/Ship";
 import Bullet from "./models/Bullet";
+import Enemy from "./models/Enemy";
+import EnemyPool from "./models/EnemyPool";
+import EnemyBulletPool from "./models/EnemyBulletPool";
+import Pool from "./models/Pool";
 
 import ImageRepo from "./repos/ImageRepo";
 
@@ -26,6 +30,10 @@ export default class Game {
     Bullet.prototype.context = this.mainContext;
     Bullet.prototype.canvasWidth = this.mainCanvas.width;
     Bullet.prototype.canvasHeight = this.mainCanvas.height;
+
+    Enemy.prototype.context = this.mainContext;
+    Enemy.prototype.canvasWidth = this.mainCanvas.width;
+    Enemy.prototype.canvasHeight = this.mainCanvas.height;
   }
 
   init() {
@@ -49,11 +57,35 @@ export default class Game {
       ImageRepo.spaceship.height
     );
     this.ship.draw();
-  }
+
+    // Initialize the enemy pool object
+    this.enemyBulletPool = new EnemyBulletPool(50);
+    this.enemyBulletPool.init();
+
+    Enemy.prototype.enemyBulletPool = this.enemyBulletPool;
+
+    this.enemyPool = new EnemyPool(30);
+    this.enemyPool.init();
+    const height = ImageRepo.enemy.height;
+    const width = ImageRepo.enemy.width;
+    let x = 100;
+    let y = -height;
+    let spacer = y * 1.5;
+    for (let i = 1; i <= 18; i++) {
+      this.enemyPool.get(x, y, 2);
+      x += width + 25;
+      if (i % 6 == 0) {
+        x = 100;
+        y += spacer;
+      }
+    }
+  }  
 
   render() {
     this.background.draw();
     this.ship.move();
     this.ship.bulletPool.animate();
+    this.enemyPool.animate();
+    this.enemyBulletPool.animate();
   }
 }

@@ -1,5 +1,5 @@
 import Drawable from "../interfaces/Drawable";
-import Pool from "../models/Pool";
+import BulletPool from "../models/BulletPool";
 import ImageRepo from "../repos/ImageRepo";
 import KeyboardController from "../controller/KeyboardController";
 /**
@@ -10,7 +10,7 @@ import KeyboardController from "../controller/KeyboardController";
 export default class Ship extends Drawable {
   constructor(x, y, width, height) {
     super(x, y, 3, width, height);
-    this.bulletPool = new Pool(30);
+    this.bulletPool = new BulletPool(30);
     this.bulletPool.init();
 
     this.counter = 0;

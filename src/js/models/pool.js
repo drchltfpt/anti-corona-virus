@@ -1,5 +1,3 @@
-import Bullet from "./Bullet";
-import ImageRepository from "../repos/ImageRepo";
 /**
  * Custom Pool object. Holds Bullet objects to be managed to prevent
  * garbage collection.
@@ -10,22 +8,10 @@ export default class Pool {
     this.pool = [];
   }
 
+  /*
+   * Populates the pool array with Bullet objects
+   */
   init() {
-    /*
-     * Populates the pool array with Bullet objects
-     */
-    let bullet;
-    for (let i = 0; i < this.size; i++) {
-      // Initalize the bullet object
-      bullet = new Bullet(
-        0,
-        0,
-        ImageRepository.bullet.width,
-        ImageRepository.bullet.height
-      );
-
-      this.pool.push(bullet);
-    }
   }
 
   /*

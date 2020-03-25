@@ -1,13 +1,14 @@
 import Drawable from "../interfaces/Drawable";
-import ImageRepository from "../repos/ImageRepo";
+import ImageRepo from "../repos/ImageRepo";
 /**
  * Creates the Bullet object which the ship fires. The bullets are
  * drawn on the "main" canvas.
  */
 class Bullet extends Drawable {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, type) {
     super(x, y, 0, width, height);
     this.alive = false; // Is true if the bullet is currently in use
+    this.type = type;
   }
 
   /*
@@ -19,10 +20,17 @@ class Bullet extends Drawable {
   draw() {
     this.context.clearRect(this.x, this.y, this.width, this.height);
     this.y -= this.speed;
-    if (this.y <= 0 - this.height) {
+    if (this.type === "bullet" && this.y <= 0 - this.height) {
+      return true;
+    } else if (this.type === "enemyBullet" && this.y >= this.canvasHeight) {
       return true;
     } else {
-      this.context.drawImage(ImageRepository.bullet, this.x, this.y);
+      if (this.type === "bullet") {
+        this.context.drawImage(ImageRepo.bullet, this.x, this.y);
+      } else if (this.type === "enemyBullet") {
+        this.context.drawImage(ImageRepo.enemyBullet, this.x, this.y);
+      }
+      return false;
     }
   }
 
