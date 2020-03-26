@@ -55,7 +55,7 @@ class QuadTree {
    * Return all objects that the object could collide with
    */
   findObjects(returnedObjects, obj) {
-    if (typeof(obj) === "undefined") {
+    if (typeof obj === "undefined") {
       console.log("UNDEFINED OBJECT");
       return;
     }
@@ -78,7 +78,7 @@ class QuadTree {
    * objects to their corresponding nodes.
    */
   insert(obj) {
-    if (typeof(obj) === "undefined") {
+    if (typeof obj === "undefined") {
       return;
     }
 
@@ -102,14 +102,13 @@ class QuadTree {
     this.objects.push(obj);
     // Prevent infinite splitting
     if (this.objects.length > this.maxObjects && this.level < this.maxLevels) {
-      if (this.nodes[0] == "null") {
+      if (this.nodes[0] == null) {
         this.split();
       }
 
       let i = 0;
       while (i < this.objects.length) {
         let index = this.getIndex(this.objects[i]);
-        console.log(this.objects)
         if (index != -1) {
           this.nodes[index].insert(this.objects.splice(i, 1)[0]); // Object.entries
         } else {
@@ -169,7 +168,7 @@ class QuadTree {
         width: subWidth,
         height: subHeight
       },
-      level + 1
+      this.level + 1
     );
     this.nodes[1] = new QuadTree(
       {
@@ -178,7 +177,7 @@ class QuadTree {
         width: subWidth,
         height: subHeight
       },
-      level + 1
+      this.level + 1
     );
     this.nodes[2] = new QuadTree(
       {
@@ -187,7 +186,7 @@ class QuadTree {
         width: subWidth,
         height: subHeight
       },
-      level + 1
+      this.level + 1
     );
     this.nodes[3] = new QuadTree(
       {
@@ -196,9 +195,9 @@ class QuadTree {
         width: subWidth,
         height: subHeight
       },
-      level + 1
+      this.level + 1
     );
-  };
+  }
 }
 
 export default QuadTree;

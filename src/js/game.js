@@ -90,16 +90,17 @@ export default class Game {
     });
   }
 
-  render() {
+  beforeRender() {
     // Insert objects into quadtree
-    this.quadTree;
     this.quadTree.clear();
     this.quadTree.insert(this.ship);
     this.quadTree.insert(this.ship.bulletPool.getPool());
-    // this.quadTree.insert(this.enemyPool.getPool());
+    this.quadTree.insert(this.enemyPool.getPool());
     this.quadTree.insert(this.enemyBulletPool.getPool());
     this.detectCollision();
+  }
 
+  render() {
     this.background.draw();
     this.ship.move();
     this.ship.bulletPool.animate();
@@ -120,9 +121,9 @@ export default class Game {
         if (
           objects[x].collidableWith === obj[y].type &&
           objects[x].x < obj[y].x + obj[y].width &&
-            objects[x].x + objects[x].width > obj[y].x &&
-            objects[x].y < obj[y].y + obj[y].height &&
-            objects[x].y + objects[x].height > obj[y].y
+          objects[x].x + objects[x].width > obj[y].x &&
+          objects[x].y < obj[y].y + obj[y].height &&
+          objects[x].y + objects[x].height > obj[y].y
         ) {
           objects[x].isColliding = true;
           obj[y].isColliding = true;
