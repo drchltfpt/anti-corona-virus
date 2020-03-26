@@ -18,9 +18,12 @@ class Bullet extends Drawable {
    * the bullet.
    */
   draw() {
-    this.context.clearRect(this.x, this.y, this.width, this.height);
+    this.context.clearRect(this.x - 1, this.y - 1, this.width + 2, this.height + 2);
     this.y -= this.speed;
-    if (this.type === "bullet" && this.y <= 0 - this.height) {
+    
+    if (this.isColliding) {
+      return true;
+    } else if (this.type === "bullet" && this.y <= 0 - this.height) {
       return true;
     } else if (this.type === "enemyBullet" && this.y >= this.canvasHeight) {
       return true;
@@ -51,6 +54,7 @@ class Bullet extends Drawable {
     this.y = 0;
     this.speed = 0;
     this.alive = false;
+    this.isColliding = false;
   }
 }
 

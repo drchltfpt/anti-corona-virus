@@ -11,8 +11,7 @@ export default class Pool {
   /*
    * Populates the pool array with Bullet objects
    */
-  init() {
-  }
+  init() {}
 
   /*
    * Grabs the last item in the list and initializes it and
@@ -49,5 +48,19 @@ export default class Pool {
         }
       } else break;
     }
+  }
+
+  /*
+   * Return all alive objects in the pool as an array
+   * that will then be inserted into the quadtree
+   */
+  getPool() {
+    let obj = [];
+    for (let i = 0; i < this.size; i++) {
+      if (this.pool[i].alive) {
+        obj.push(this.pool[i]);
+      }
+    }
+    return obj;
   }
 }

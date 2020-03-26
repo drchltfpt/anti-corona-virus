@@ -8,6 +8,7 @@ class Enemy extends Drawable {
     this.chance = 0;
     this.percentFire = 0.01;
     this.alive = false; // Is true if the bullet is currently in use
+    this.type = "enemy";
   }
 
   /*
@@ -42,11 +43,14 @@ class Enemy extends Drawable {
       this.y -= 5;
       this.speedX = -this.speed;
     }
-    this.context.drawImage(ImageRepo.enemy, this.x, this.y);
-    // Enemy has a chance to shoot every movement
-    this.chance = Math.floor(Math.random() * 101);
-    if (this.chance / 100 < this.percentFire) {
-      this.fire();
+
+    if (!this.isColliding) {
+      this.context.drawImage(ImageRepo.enemy, this.x, this.y);
+      // Enemy has a chance to shoot every movement
+      this.chance = Math.floor(Math.random() * 101);
+      if (this.chance / 100 < this.percentFire) {
+        this.fire();
+      }
     }
   }
 
@@ -67,6 +71,7 @@ class Enemy extends Drawable {
     this.speedX = 0;
     this.speedY = 0;
     this.alive = false;
+    this.isColliding = false;
   }
 }
 

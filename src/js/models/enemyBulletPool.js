@@ -20,6 +20,8 @@ class EnemyBulletPool extends Pool {
         ImageRepo.enemyBullet.height,
         "enemyBullet"
       );
+      bullet.collidableWith = "ship";
+      bullet.type = "enemyBullet";
 
       this.pool.push(bullet);
     }

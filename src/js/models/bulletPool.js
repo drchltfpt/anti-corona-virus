@@ -20,6 +20,8 @@ class BulletPool extends Pool {
         ImageRepo.bullet.height,
         "bullet"
       );
+      bullet.collidableWith = "enemy";
+      bullet.type = "bullet";
 
       this.pool.push(bullet);
     }

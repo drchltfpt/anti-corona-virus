@@ -13,11 +13,17 @@ class Drawable {
     this.speed = speed;
     this.width = width;
     this.height = height;
+    this.collidableWith = "";
+    this.isColliding = false;
+    this.type = ""
   }
 
   // Define abstract function to be implemented in child objects
   draw() {}
   move() {}
+  isCollidableWith(object) {
+    return (this.collidableWith === object.type);
+  } 
 }
 
 module.exports = Drawable;
