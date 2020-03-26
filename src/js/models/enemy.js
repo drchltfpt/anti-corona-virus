@@ -9,6 +9,7 @@ class Enemy extends Drawable {
     this.percentFire = 0.01;
     this.alive = false; // Is true if the bullet is currently in use
     this.type = "enemy";
+    this.collidableWith = "bullet";
   }
 
   /*
@@ -51,6 +52,9 @@ class Enemy extends Drawable {
       if (this.chance / 100 < this.percentFire) {
         this.fire();
       }
+      return false;
+    } else {
+      return true;
     }
   }
 
