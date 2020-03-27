@@ -1,5 +1,6 @@
 import Drawable from "../interfaces/Drawable";
 import Pool from "./Pool";
+import SoundPool from "../models/SoundPool";
 import ImageRepo from "../repos/ImageRepo";
 
 class Enemy extends Drawable {
@@ -10,6 +11,9 @@ class Enemy extends Drawable {
     this.alive = false; // Is true if the bullet is currently in use
     this.type = "enemy";
     this.collidableWith = "bullet";
+
+    this.explosion = new SoundPool(10);
+    this.explosion.init("explosion");
   }
 
   /*
@@ -54,6 +58,8 @@ class Enemy extends Drawable {
       }
       return false;
     } else {
+      this.playerScore += 10;
+      // this.explosion.get();
       return true;
     }
   }

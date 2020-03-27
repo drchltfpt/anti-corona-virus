@@ -1,5 +1,6 @@
 import Drawable from "../interfaces/Drawable";
 import BulletPool from "../models/BulletPool";
+import SoundPool from "../models/SoundPool";
 import ImageRepo from "../repos/ImageRepo";
 import KeyboardController from "../controller/KeyboardController";
 /**
@@ -12,6 +13,9 @@ export default class Ship extends Drawable {
     super(x, y, 3, width, height);
     this.bulletPool = new BulletPool(30);
     this.bulletPool.init();
+
+    this.laser = new SoundPool(10);
+    this.laser.init("laser");
 
     this.counter = 0;
     this.fireRate = 15;
@@ -76,5 +80,6 @@ export default class Ship extends Drawable {
   fire() {
     // this.bulletPool.getTwo(this.x + 6, this.y, 3, this.x + 33, this.y, 3);
     this.bulletPool.get(this.x + 19.5, this.y, 3);
+    this.laser.get();
   }
 }
