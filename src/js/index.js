@@ -1,8 +1,8 @@
 import Game from "./Game";
 import App from "./App";
 
-window.onload = () => {
+window.onload = async () => {
   const app = new App(new Game());
 
-  app.setup();
+  await app.setup();
 };

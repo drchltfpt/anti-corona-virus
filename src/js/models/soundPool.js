@@ -3,8 +3,7 @@
  */
 class SoundPool {
   constructor(maxSize) {
-    this.maxSize = maxSize;
-    this.size = this.maxSize; // Max sounds allowed in the pool
+    this.size = maxSize; // Max sounds allowed in the pool
     this.pool = [];
     this.soundPool = this.pool;
     this.currSound = 0;
@@ -38,7 +37,10 @@ class SoundPool {
    * Plays a sound
    */
   get() {
-    if (this.soundPool[this.currSound].currentTime == 0 || this.soundPool[this.currSound].ended) {
+    if (
+      this.soundPool[this.currSound].currentTime == 0 ||
+      this.soundPool[this.currSound].ended
+    ) {
       this.soundPool[this.currSound].play();
     }
     this.currSound = (this.currSound + 1) % this.size;

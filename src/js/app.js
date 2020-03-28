@@ -3,10 +3,23 @@ export default class App {
     this._game = game;
   }
 
-  setup() {
-    this._game.init();
+  async sleep(miliseconds) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(true);
+      }, miliseconds);
+    });
+  }
+
+  async setup() {
+    const isInitOk = await this._game.init();
+
     // Any setup that is required that only runs once before game loads goes here
-    this.gameLoop();
+    if (isInitOk) {
+      await this.sleep(3000);
+      this._game.doAfterInit();
+      this.gameLoop();
+    }
   }
   gameLoop() {
     this._game.beforeRender();

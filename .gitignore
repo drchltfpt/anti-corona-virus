@@ -1,4 +1,12 @@
+# dependencies
 node_modules
+
+# editor
 .vscode
+
+#build folder
 build
+public
+
+# misc
 .DS_Store

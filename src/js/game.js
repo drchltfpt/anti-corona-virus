@@ -37,99 +37,104 @@ export default class Game {
     Enemy.prototype.context = this.mainContext;
     Enemy.prototype.canvasWidth = this.mainCanvas.width;
     Enemy.prototype.canvasHeight = this.mainCanvas.height;
-
-    document.getElementById("restart").addEventListener("click", () => {
-      this.restart();
-    });
   }
 
   init() {
-    this.background = new Background(
-      0,
-      0,
-      1,
-      this.bgCanvas.width,
-      this.bgCanvas.height,
-      this.bgContext
-    );
+    return new Promise((resolve, reject) => {
+      this.background = new Background(
+        0,
+        0,
+        1,
+        this.bgCanvas.width,
+        this.bgCanvas.height,
+        this.bgContext
+      );
 
-    // Audio files
-    this.laser = new SoundPool(10);
-    this.laser.init("laser");
-    this.explosion = new SoundPool(20);
-    this.explosion.init("explosion");
-    this.backgroundAudio = new Audio("sounds/kick_shock.wav");
-    this.backgroundAudio.loop = true;
-    this.backgroundAudio.volume = 0.25;
-    this.backgroundAudio.load();
-    this.gameOverAudio = new Audio("sounds/game_over.wav");
-    this.gameOverAudio.loop = true;
-    this.gameOverAudio.volume = 0.25;
-    this.gameOverAudio.load();
+      // Audio files
+      this.laser = new SoundPool(10);
+      this.laser.init("laser");
+      this.explosion = new SoundPool(20);
+      this.explosion.init("explosion");
 
-    // Set the ship to start near the bottom middle of the canvas
-    const shipStartX = this.shipCanvas.width / 2 - ImageRepo.spaceship.width;
-    const shipStartY =
-      (this.shipCanvas.height / 4) * 3 + ImageRepo.spaceship.height * 2;
-    this.ship = new Ship(
-      shipStartX,
-      shipStartY,
-      ImageRepo.spaceship.width,
-      ImageRepo.spaceship.height
-    );
+      this.backgroundAudio = new Audio("sounds/kick_shock.wav");
+      this.backgroundAudio.loop = true;
+      this.backgroundAudio.volume = 0.25;
+      this.backgroundAudio.load();
+
+      this.gameOverAudio = new Audio("sounds/game_over.wav");
+      this.gameOverAudio.loop = true;
+      this.gameOverAudio.volume = 0.25;
+      this.gameOverAudio.load();
+
+      // Set the ship to start near the bottom middle of the canvas
+      const shipStartX = this.shipCanvas.width / 2 - ImageRepo.spaceship.width;
+      const shipStartY =
+        (this.shipCanvas.height / 4) * 3 + ImageRepo.spaceship.height * 2;
+      this.ship = new Ship(
+        shipStartX,
+        shipStartY,
+        ImageRepo.spaceship.width,
+        ImageRepo.spaceship.height
+      );
+
+      // Initialize the enemy pool object
+      this.enemyBulletPool = new EnemyBulletPool(50);
+      this.enemyBulletPool.init();
+
+      Enemy.prototype.enemyBulletPool = this.enemyBulletPool;
+
+      this.enemyPool = new EnemyPool(30);
+      this.enemyPool.init();
+      this.spawnWave();
+      const height = ImageRepo.enemy.height;
+      const width = ImageRepo.enemy.width;
+      let x = 100;
+      let y = -height;
+      let spacer = y * 1.5;
+      for (let i = 1; i <= 18; i++) {
+        this.enemyPool.get(x, y, 2);
+        x += width + 25;
+        if (i % 6 == 0) {
+          x = 100;
+          y += spacer;
+        }
+      }
+
+      this.user = new User(1, 0);
+      Enemy.prototype.user = this.user;
+
+      // Start QuadTree
+      this.quadTree = new QuadTree({
+        x: 0,
+        y: 0,
+        width: this.mainCanvas.width,
+        height: this.mainCanvas.height
+      });
+
+      this.checkAudio = window.setInterval(() => {
+        this.checkReadyState(resolve);
+      }, 1000);
+    });
+  }
+
+  doAfterInit() {
     this.ship.draw();
     this.backgroundAudio.play();
-     
-    // Initialize the enemy pool object
-    this.enemyBulletPool = new EnemyBulletPool(50);
-    this.enemyBulletPool.init();
-
-    Enemy.prototype.enemyBulletPool = this.enemyBulletPool;
-
-    this.enemyPool = new EnemyPool(30);
-    this.enemyPool.init();
-    this.spawnWave();
-    const height = ImageRepo.enemy.height;
-    const width = ImageRepo.enemy.width;
-    let x = 100;
-    let y = -height;
-    let spacer = y * 1.5;
-    for (let i = 1; i <= 18; i++) {
-      this.enemyPool.get(x, y, 2);
-      x += width + 25;
-      if (i % 6 == 0) {
-        x = 100;
-        y += spacer;
-      }
-    }
-
-    this.user = new User(1, 0);
-    Enemy.prototype.user = this.user;
-
-    // Start QuadTree
-    this.quadTree = new QuadTree({
-      x: 0,
-      y: 0,
-      width: this.mainCanvas.width,
-      height: this.mainCanvas.height
-    });
-
-    // this.checkAudio = window.setInterval(() => {
-    //   this.checkReadyState()
-    // }, 1000);
   }
 
   /**
    * Ensure the game sound has loaded before starting the game
    */
-  // checkReadyState() {
-  //   if (
-  //     this.gameOverAudio.readyState === 4 &&
-  //     this.backgroundAudio.readyState === 4
-  //   ) {
-  //     window.clearInterval(this.checkAudio);
-  //   }
-  // }
+  checkReadyState(resolve) {
+    if (
+      this.gameOverAudio.readyState === 4 &&
+      this.backgroundAudio.readyState === 4
+    ) {
+      window.clearInterval(this.checkAudio);
+      console.log("ready");
+      resolve(true);
+    }
+  }
 
   beforeRender() {
     // Insert objects into quadtree
@@ -144,7 +149,6 @@ export default class Game {
   render() {
     document.getElementById("score").innerHTML = this.user.score;
     this.background.draw();
-    this.backgroundAudio.play();
     this.ship.move();
     this.ship.bulletPool.animate();
     this.enemyPool.animate();
@@ -153,15 +157,6 @@ export default class Game {
     // No more enemies
     if (this.enemyPool.getPool().length === 0) {
       this.spawnWave();
-    }
-
-    if (this.ship.alive) {
-      this.background.draw();
-      this.backgroundAudio.play();
-      this.ship.move();
-      this.ship.bulletPool.animate();
-      this.enemyPool.animate();
-      this.enemyBulletPool.animate();
     }
   }
 
