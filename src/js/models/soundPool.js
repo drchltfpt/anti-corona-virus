@@ -6,6 +6,7 @@ class SoundPool {
     this.maxSize = maxSize;
     this.size = this.maxSize; // Max sounds allowed in the pool
     this.pool = [];
+    this.soundPool = this.pool;
     this.currSound = 0;
   }
 
@@ -20,7 +21,7 @@ class SoundPool {
         laser.volume = 0.12;
         laser.load();
 
-        this.pool.push(laser);
+        this.soundPool.push(laser);
       }
     } else if (object == "explosion") {
       for (let i = 0; i < this.size; i++) {
@@ -28,7 +29,7 @@ class SoundPool {
         explosion.volume = 0.1;
         explosion.load();
 
-        this.pool.push(explosion);
+        this.soundPool.push(explosion);
       }
     }
   }
@@ -37,8 +38,8 @@ class SoundPool {
    * Plays a sound
    */
   get() {
-    if (this.pool[this.currSound].currentTime == 0 || this.pool[this.currSound].ended) {
-      this.pool[this.currSound].play();
+    if (this.soundPool[this.currSound].currentTime == 0 || this.soundPool[this.currSound].ended) {
+      this.soundPool[this.currSound].play();
     }
     this.currSound = (this.currSound + 1) % this.size;
   }

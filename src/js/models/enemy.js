@@ -58,8 +58,10 @@ class Enemy extends Drawable {
       }
       return false;
     } else {
-      this.playerScore += 10;
-      // this.explosion.get();
+      console.log('after enenmy', this.user.score)
+      this.user.score += 10;
+      console.log('before enenmy', this.user.score) 
+      this.explosion.get();
       return true;
     }
   }

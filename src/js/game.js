@@ -9,10 +9,10 @@ import QuadTree from "./models/QuadTree";
 import SoundPool from "./models/SoundPool";
 
 import ImageRepo from "./repos/ImageRepo";
+import User from "./models/user";
 
 export default class Game {
   constructor() {
-    this.playerScore = 0;
     this.bgCanvas = document.getElementById("background");
     this.shipCanvas = document.getElementById("ship");
     this.mainCanvas = document.getElementById("main");
@@ -53,6 +53,20 @@ export default class Game {
       this.bgContext
     );
 
+    // Audio files
+    this.laser = new SoundPool(10);
+    this.laser.init("laser");
+    this.explosion = new SoundPool(20);
+    this.explosion.init("explosion");
+    this.backgroundAudio = new Audio("sounds/kick_shock.wav");
+    this.backgroundAudio.loop = true;
+    this.backgroundAudio.volume = 0.25;
+    this.backgroundAudio.load();
+    this.gameOverAudio = new Audio("sounds/game_over.wav");
+    this.gameOverAudio.loop = true;
+    this.gameOverAudio.volume = 0.25;
+    this.gameOverAudio.load();
+
     // Set the ship to start near the bottom middle of the canvas
     const shipStartX = this.shipCanvas.width / 2 - ImageRepo.spaceship.width;
     const shipStartY =
@@ -64,14 +78,13 @@ export default class Game {
       ImageRepo.spaceship.height
     );
     this.ship.draw();
-
+    this.backgroundAudio.play();
+     
     // Initialize the enemy pool object
     this.enemyBulletPool = new EnemyBulletPool(50);
     this.enemyBulletPool.init();
 
     Enemy.prototype.enemyBulletPool = this.enemyBulletPool;
-
-    Enemy.prototype.playerScore = this.playerScore;
 
     this.enemyPool = new EnemyPool(30);
     this.enemyPool.init();
@@ -90,6 +103,9 @@ export default class Game {
       }
     }
 
+    this.user = new User(1, 0);
+    Enemy.prototype.user = this.user;
+
     // Start QuadTree
     this.quadTree = new QuadTree({
       x: 0,
@@ -98,32 +114,22 @@ export default class Game {
       height: this.mainCanvas.height
     });
 
-    // Audio files
-    this.laser = new SoundPool(10);
-    this.laser.init("laser");
-    this.explosion = new SoundPool(20);
-    this.explosion.init("explosion");
-    this.backgroundAudio = new Audio("sounds/kick_shock.wav");
-    this.backgroundAudio.loop = true;
-    this.backgroundAudio.volume = 0.25;
-    this.backgroundAudio.load();
-    this.gameOverAudio = new Audio("sounds/game_over.wav");
-    this.gameOverAudio.loop = true;
-    this.gameOverAudio.volume = 0.25;
-    this.gameOverAudio.load();
+    // this.checkAudio = window.setInterval(() => {
+    //   this.checkReadyState()
+    // }, 1000);
   }
 
   /**
    * Ensure the game sound has loaded before starting the game
    */
-  checkReadyState() {
-    if (
-      this.gameOverAudio.readyState === 4 &&
-      this.backgroundAudio.readyState === 4
-    ) {
-      window.clearInterval(this.checkAudio);
-    }
-  }
+  // checkReadyState() {
+  //   if (
+  //     this.gameOverAudio.readyState === 4 &&
+  //     this.backgroundAudio.readyState === 4
+  //   ) {
+  //     window.clearInterval(this.checkAudio);
+  //   }
+  // }
 
   beforeRender() {
     // Insert objects into quadtree
@@ -136,8 +142,9 @@ export default class Game {
   }
 
   render() {
-    document.getElementById("score").innerHTML = this.playerScore;
+    document.getElementById("score").innerHTML = this.user.score;
     this.background.draw();
+    this.backgroundAudio.play();
     this.ship.move();
     this.ship.bulletPool.animate();
     this.enemyPool.animate();
@@ -146,6 +153,15 @@ export default class Game {
     // No more enemies
     if (this.enemyPool.getPool().length === 0) {
       this.spawnWave();
+    }
+
+    if (this.ship.alive) {
+      this.background.draw();
+      this.backgroundAudio.play();
+      this.ship.move();
+      this.ship.bulletPool.animate();
+      this.enemyPool.animate();
+      this.enemyBulletPool.animate();
     }
   }
 
@@ -229,11 +245,14 @@ export default class Game {
       ImageRepo.spaceship.height
     );
     this.ship.draw();
+    this.backgroundAudio.play();
 
     this.enemyPool.init();
     this.spawnWave();
     this.enemyBulletPool.init();
-    this.playerScore = 0;
+
+    this.user.score = 0;
+
     this.backgroundAudio.currentTime = 0;
     this.backgroundAudio.play();
   }
