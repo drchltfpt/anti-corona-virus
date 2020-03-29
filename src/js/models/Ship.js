@@ -21,6 +21,7 @@ export default class Ship extends Drawable {
     this.fireRate = 15;
     this.collidableWith = "enemyBullet";
     this.type = "ship";
+    this.alive = true;
   }
 
   draw() {
@@ -65,6 +66,9 @@ export default class Ship extends Drawable {
       // Finish by redrawing the ship
       if (!this.isColliding) {
         this.draw();
+      } else {
+        this.alive = false;
+        return false;
       }
     }
 
@@ -72,6 +76,7 @@ export default class Ship extends Drawable {
       this.fire();
       this.counter = 0;
     }
+    return true;
   }
 
   /*

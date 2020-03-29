@@ -25,6 +25,11 @@ class Background extends Drawable {
     // If the image scrolled off the screen, reset
     if (this.y >= this.canvasHeight) this.y = 0;
   }
+
+  reset() {
+    this.x = 0;
+    this.y = 0;
+  }
 }
 
 export default Background;

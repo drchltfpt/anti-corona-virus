@@ -7,12 +7,14 @@ import EnemyBulletPool from "./models/EnemyBulletPool";
 import Pool from "./models/Pool";
 import QuadTree from "./models/QuadTree";
 import SoundPool from "./models/SoundPool";
+import PlayView from "./views/PlayView";
 
 import ImageRepo from "./repos/ImageRepo";
 import User from "./models/user";
 
 export default class Game {
   constructor() {
+    this.isGameOver = false;
     this.bgCanvas = document.getElementById("background");
     this.shipCanvas = document.getElementById("ship");
     this.mainCanvas = document.getElementById("main");
@@ -114,6 +116,8 @@ export default class Game {
       this.checkAudio = window.setInterval(() => {
         this.checkReadyState(resolve);
       }, 1000);
+
+      this.PlayView = new PlayView(this.restart.bind(this));
     });
   }
 
@@ -131,7 +135,7 @@ export default class Game {
       this.backgroundAudio.readyState === 4
     ) {
       window.clearInterval(this.checkAudio);
-      console.log("ready");
+      document.getElementById('loading').style.display = "none";
       resolve(true);
     }
   }
@@ -144,12 +148,15 @@ export default class Game {
     this.quadTree.insert(this.enemyPool.getPool());
     this.quadTree.insert(this.enemyBulletPool.getPool());
     this.detectCollision();
+    document.getElementById("score").innerHTML = this.user.score;
   }
 
   render() {
-    document.getElementById("score").innerHTML = this.user.score;
     this.background.draw();
-    this.ship.move();
+    this.isGameOver = !this.ship.move();
+    if (this.isGameOver) {
+      this.gameOver();
+    }
     this.ship.bulletPool.animate();
     this.enemyPool.animate();
     this.enemyBulletPool.animate();
@@ -226,8 +233,10 @@ export default class Game {
       this.mainCanvas.width,
       this.mainCanvas.height
     );
+
     this.quadTree.clear();
-    this.background.init(0, 0);
+
+    this.background.reset();
 
     // Set the ship to start near the bottom middle of the canvas
     const shipStartX = this.shipCanvas.width / 2 - ImageRepo.spaceship.width;
@@ -240,7 +249,6 @@ export default class Game {
       ImageRepo.spaceship.height
     );
     this.ship.draw();
-    this.backgroundAudio.play();
 
     this.enemyPool.init();
     this.spawnWave();

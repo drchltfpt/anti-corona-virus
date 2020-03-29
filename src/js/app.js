@@ -24,8 +24,10 @@ export default class App {
   gameLoop() {
     this._game.beforeRender();
     // need to bind the current this reference to the callback
-    requestAnimationFrame(this.gameLoop.bind(this));
+    if (this._game.ship.alive) {
+      requestAnimationFrame(this.gameLoop.bind(this));
+      this._game.render();
+    }
 
-    this._game.render();
   }
 }
