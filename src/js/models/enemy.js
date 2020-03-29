@@ -4,11 +4,11 @@ import SoundPool from "../models/SoundPool";
 import ImageRepo from "../repos/ImageRepo";
 
 class Enemy extends Drawable {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, type) {
     super(x, y, 0, width, height);
+    this.type = type;
 
     this.percentFire = 0.01; // constant
-    this.type = "enemy"; // constant
     this.collidableWith = "bullet"; // constant
 
     this.explosion = new SoundPool(10);
@@ -59,7 +59,11 @@ class Enemy extends Drawable {
     }
 
     if (!this.isColliding) {
-      this.context.drawImage(ImageRepo.enemy, this.x, this.y);
+      if (this.type == "bacterias") {
+        this.context.drawImage(ImageRepo.bacterias, this.x, this.y);
+      } else if (this.type == "virus") {
+        this.context.drawImage(ImageRepo.virus, this.x, this.y);
+      }
       // Enemy has a chance to shoot every movement
       this.chance = Math.floor(Math.random() * 101);
       if (this.chance / 100 < this.percentFire) {

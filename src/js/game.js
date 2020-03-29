@@ -81,19 +81,6 @@ export default class Game extends FlowGame {
       this.enemyPool = new EnemyPool(30);
       this.enemyPool.init();
       this.spawnWave();
-      const height = ImageRepo.enemy.height;
-      const width = ImageRepo.enemy.width;
-      let x = 100;
-      let y = -height;
-      let spacer = y * 1.5;
-      for (let i = 1; i <= 18; i++) {
-        this.enemyPool.get(x, y, 2);
-        x += width + 25;
-        if (i % 6 == 0) {
-          x = 100;
-          y += spacer;
-        }
-      }
 
       this.user = new User(1, 0);
       Enemy.prototype.user = this.user;
@@ -154,7 +141,7 @@ export default class Game extends FlowGame {
     if (this.isGameOver) {
       this.gameOver();
     }
-    this.ship.bulletPool.animate();
+    this.ship.animateBulletBool();
     this.enemyPool.animate();
     this.enemyBulletPool.animate();
 
@@ -190,8 +177,8 @@ export default class Game extends FlowGame {
 
   // Spawn a new wave of enemies
   spawnWave() {
-    let height = ImageRepo.enemy.height;
-    let width = ImageRepo.enemy.width;
+    let height = ImageRepo.virus.height;
+    let width = ImageRepo.virus.width;
     let x = 100;
     let y = -height;
     let spacer = y * 1.5;

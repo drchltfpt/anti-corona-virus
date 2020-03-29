@@ -1,4 +1,5 @@
 const KEY_CODES = {
+  9: "tab",
   32: "space",
   37: "left",
   38: "up",
@@ -29,6 +30,10 @@ class KeyboardController {
       // Firefox and opera use charCode instead of keyCode to
       // return which key was pressed.
       var keyCode = e.keyCode ? e.keyCode : e.charCode;
+      if (keyCode === 9) {
+        e.preventDefault();
+        return;
+      }
       if (KEY_CODES[keyCode]) {
         e.preventDefault();
         self.KEY_STATUS[KEY_CODES[keyCode]] = true;
@@ -43,6 +48,11 @@ class KeyboardController {
      */
     document.onkeyup = function(e) {
       var keyCode = e.keyCode ? e.keyCode : e.charCode;
+      if (keyCode === 9) {
+        e.preventDefault();
+        self.KEY_STATUS.tab = true;
+        return;
+      }
       if (KEY_CODES[keyCode]) {
         e.preventDefault();
         self.KEY_STATUS[KEY_CODES[keyCode]] = false;

@@ -10,17 +10,17 @@ class BulletPool extends Pool {
   /*
    * Populates the pool array with Bullet objects
    */
-  init() {
+  init(bulletType) {
     for (let i = 0; i < this.size; i++) {
       // Initalize the bullet object
       const bullet = new Bullet(
         0,
         0,
-        ImageRepo.bullet.width,
-        ImageRepo.bullet.height,
-        "bullet"
+        ImageRepo.leukocyte.width,
+        ImageRepo.leukocyte.height,
+        bulletType
       );
-      bullet.collidableWith = "enemy";
+      bulletType == "vaccine" ? bullet.collidableWith = "virus" : bullet.collidableWith = "bacterias";
 
       this.pool.push(bullet);
     }

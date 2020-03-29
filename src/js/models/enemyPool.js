@@ -16,8 +16,9 @@ class EnemyPool extends Pool {
       const enemy = new Enemy(
         0,
         0,
-        ImageRepo.enemy.width,
-        ImageRepo.enemy.height
+        ImageRepo.virus.width,
+        ImageRepo.virus.height,
+        i % 2 ? "virus": "bacterias"
       );
 
       this.pool.push(enemy);

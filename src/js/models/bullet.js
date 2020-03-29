@@ -34,13 +34,25 @@ class Bullet extends Drawable {
 
     if (this.isColliding) {
       return true;
-    } else if (this.type === "bullet" && this.y <= 0 - this.height) {
+    } else if (this.type === "vitaminC" && this.y <= 0 - this.height) {
+      return true;
+    } else if (this.type === "antibiotic" && this.y <= 0 - this.height) {
+      return true;
+    } else if (this.type === "vaccine" && this.y <= 0 - this.height) {
+      return true;
+    } else if (this.type === "leukocyte" && this.y <= 0 - this.height) {
       return true;
     } else if (this.type === "enemyBullet" && this.y >= this.canvasHeight) {
       return true;
     } else {
-      if (this.type === "bullet") {
-        this.context.drawImage(ImageRepo.bullet, this.x, this.y);
+      if (this.type === "vitaminC") {
+        this.context.drawImage(ImageRepo.vitaminC, this.x, this.y);
+      } else if (this.type === "antibiotic") {
+        this.context.drawImage(ImageRepo.antibiotic, this.x, this.y);
+      } else if (this.type === "vaccine") {
+        this.context.drawImage(ImageRepo.vaccine, this.x, this.y);
+      } else if (this.type === "leukocyte") {
+        this.context.drawImage(ImageRepo.leukocyte, this.x, this.y);
       } else if (this.type === "enemyBullet") {
         this.context.drawImage(ImageRepo.enemyBullet, this.x, this.y);
       }

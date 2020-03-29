@@ -12,8 +12,22 @@ export default class Ship extends Drawable {
   constructor(x, y, width, height) {
     super(x, y, 3, width, height);
 
-    this.bulletPool = new BulletPool(30);
-    this.bulletPool.init();
+    this.bulletTypes = ["leukocyte", "antibiotic", "vaccine", "vitaminC"];
+    this.activeBulletTypeIndex = 0;
+
+    this.leukocytePool = new BulletPool(30);
+    this.leukocytePool.init("leukocyte");
+
+    this.antibioticPool = new BulletPool(30);
+    this.antibioticPool.init("antibiotic");
+
+    this.vaccinePool = new BulletPool(30);
+    this.vaccinePool.init("vaccine");
+
+    this.vitaminCPool = new BulletPool(30);
+    this.vitaminCPool.init("vitaminC");
+
+    this.bulletPool = this.leukocytePool;
 
     this.laser = new SoundPool(10);
     this.laser.init("laser");
@@ -27,7 +41,6 @@ export default class Ship extends Drawable {
   }
 
   static getShip() {
-    console.log("canvasWidth: ", Ship.prototype.canvasWidth);
     // Set the ship to start near the bottom middle of the canvas
     const shipStartX =
       Ship.prototype.canvasWidth / 2 - ImageRepo.spaceship.width;
@@ -40,6 +53,13 @@ export default class Ship extends Drawable {
       ImageRepo.spaceship.width,
       ImageRepo.spaceship.height
     );
+  }
+
+  animateBulletBool() {
+    this.leukocytePool.animate();
+    this.antibioticPool.animate();
+    this.vaccinePool.animate();
+    this.vitaminCPool.animate();
   }
 
   reset() {
@@ -112,6 +132,14 @@ export default class Ship extends Drawable {
       this.fire();
       this.counter = 0;
     }
+
+    if (KeyboardController.KEY_STATUS.tab &&
+      !this.isColliding)  {
+        console.log('TAB ', this.activeBulletTypeIndex)
+      this.changeBulletType();
+      KeyboardController.KEY_STATUS.tab = false;
+    }
+
     return true;
   }
 
@@ -119,8 +147,24 @@ export default class Ship extends Drawable {
    * Fires two bullets
    */
   fire() {
-    // this.bulletPool.getTwo(this.x + 6, this.y, 3, this.x + 33, this.y, 3);
-    this.bulletPool.get(this.x + 19.5, this.y, 3);
+    if (this.activeBulletTypeIndex === 0) {
+      this.bulletPool = this.leukocytePool;
+    } else if (this.activeBulletTypeIndex === 1) {
+      this.bulletPool = this.antibioticPool;
+    } else if (this.activeBulletTypeIndex === 2) {
+      this.bulletPool = this.vaccinePool;
+    } else if (this.activeBulletTypeIndex === 3) {
+      this.bulletPool = this.vitaminCPool;
+    } else {
+      this.bulletPool = this.leukocytePool;
+    }
+
+    this.bulletPool.getTwo(this.x + 6, this.y, 3, this.x + 33, this.y, 3);
+    // this.bulletPool.get(this.x + 19.5, this.y, 3);
     this.laser.get();
+  }
+
+  changeBulletType() {
+    this.activeBulletTypeIndex = (this.activeBulletTypeIndex + 1) % this.bulletTypes.length;
   }
 }
