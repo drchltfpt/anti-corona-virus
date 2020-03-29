@@ -1,0 +1,100 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background-color: #ccbba1;
+  font-family: Helvetica, sans-serif;
+}
+button {
+  color: #ffffff;
+  cursor: pointer;
+  background-color: transparent;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 2px solid #ffffff;
+  outline: none;
+}
+button:hover {
+  color: #c1e769;
+}
+canvas {
+  padding: 0;
+  margin: auto;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+}
+#background {
+  z-index: -2;
+}
+#main {
+  z-index: -1;
+}
+#ship {
+  z-index: 0;
+}
+/** A. ====== PlayView ====== **/
+.play-view {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 600px;
+  height: 360px;
+}
+/* Loading */
+
+.loading {
+  text-align: center;
+  background-color: #ffffff;
+  color: #3d3d3d;
+  font-size: 25px;
+  height: 100%;
+  padding-top: 22%;
+}
+.loading p {
+  font-weight: bold;
+}
+/* Score */
+.score {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  color: #c1e769;
+  font-weight: bold;
+  cursor: default;
+  display: none;
+}
+/* Pause game */
+.pause-game {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: none;
+}
+.pause-game button {
+  font-size: 16px;
+  padding: 4px 6px;
+}
+/* Game over */
+.game-over {
+  text-align: center;
+  margin-top: 20%;
+
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 30px;
+  cursor: default;
+  display: none;
+}
+.game-over button {
+  font-size: 20px;
+  border: 2px solid #ffffff;
+}
