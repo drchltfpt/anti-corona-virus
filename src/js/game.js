@@ -11,12 +11,15 @@ import PlayView from "./views/PlayView";
 
 import ImageRepo from "./repos/ImageRepo";
 import User from "./models/user";
+import Helper from "./utils/Helper";
 
 export default class Game extends FlowGame {
   constructor() {
     super();
 
     this.isGameOver = false;
+    this.pauseStatus = false;
+
     this.bgCanvas = document.getElementById("background");
     this.shipCanvas = document.getElementById("ship");
     this.mainCanvas = document.getElementById("main");
@@ -44,7 +47,7 @@ export default class Game extends FlowGame {
   }
 
   init() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       this.background = new Background(
         0,
         0,
@@ -106,11 +109,17 @@ export default class Game extends FlowGame {
         height: this.mainCanvas.height
       });
 
+      // Init Views
+      this.playView = new PlayView(
+        this.restart.bind(this),
+        this.pause.bind(this),
+        this.resume.bind(this)
+      );
+
+      await Helper.sleep(1000);
       this.checkAudio = window.setInterval(() => {
         this.checkReadyState(resolve);
       }, 1000);
-
-      this.PlayView = new PlayView(this.restart.bind(this));
     });
   }
 
@@ -123,7 +132,9 @@ export default class Game extends FlowGame {
       this.backgroundAudio.readyState === 4
     ) {
       window.clearInterval(this.checkAudio);
-      document.getElementById("loading").style.display = "none";
+
+      this.playView.hideLoading();
+
       resolve(true);
     }
   }
@@ -141,11 +152,15 @@ export default class Game extends FlowGame {
     this.quadTree.insert(this.enemyPool.getPool());
     this.quadTree.insert(this.enemyBulletPool.getPool());
     this.detectCollision();
-    document.getElementById("score").innerHTML = this.user.score;
+    this.playView.updateScoreCounter(this.user.score);
   }
 
   renderCondition() {
     return this.ship.alive;
+  }
+
+  isPause() {
+    return this.pauseStatus;
   }
 
   render() {
@@ -210,13 +225,22 @@ export default class Game extends FlowGame {
     this.backgroundAudio.pause();
     this.gameOverAudio.currentTime = 0;
     this.gameOverAudio.play();
-    document.getElementById("game-over").style.display = "block";
+
+    this.playView.showGameOver();
+  }
+
+  pause() {
+    this.pauseStatus = true;
+  }
+
+  resume() {
+    this.pauseStatus = false;
   }
 
   // Restart the game
-  async restart() {
+  restart() {
     this.gameOverAudio.pause();
-    document.getElementById("game-over").style.display = "none";
+    this.playView.hideGameOver();
 
     this.bgContext.clearRect(0, 0, this.bgCanvas.width, this.bgCanvas.height);
     this.shipContext.clearRect(
@@ -247,6 +271,6 @@ export default class Game extends FlowGame {
 
     this.backgroundAudio.currentTime = 0;
 
-    await this.reSetup();
+    this.reSetup();
   }
 }

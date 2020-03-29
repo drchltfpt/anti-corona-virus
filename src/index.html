@@ -3,59 +3,6 @@
   <head>
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <title>Anti Corona Virus</title>
-    <style>
-      body {
-        background-color: #ccbba1;
-      }
-      canvas {
-        padding: 0;
-        margin: auto;
-        display: block;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: transparent;
-      }
-      #background {
-        z-index: -2;
-      }
-      #main {
-        z-index: -1;
-      }
-      #ship {
-        z-index: 0;
-      }
-      .score {
-        position: absolute;
-        top: 5px;
-        left: 480px;
-        color: #000000;
-        font-weight: bold;
-        font-family: Helvetica, sans-serif;
-        cursor: default;
-      }
-      .game-over {
-        position: absolute;
-        top: 100px;
-        left: 210px;
-        color: #ff7f00;
-        font-family: Helvetica, sans-serif;
-        font-size: 30px;
-        cursor: default;
-        display: none;
-      }
-      .game-over span {
-        font-size: 20px;
-        cursor: pointer;
-        position: relative;
-        left: 50px;
-      }
-      .game-over span:hover {
-        color: #ffd700;
-      }
-    </style>
   </head>
   <body>
     <!-- The canvas for the panning background -->
@@ -68,11 +15,25 @@
     <!-- The canvas the ship uses (can only move up
          one forth the screen.) -->
     <canvas id="ship" width="600" height="360"></canvas>
-    <div class="score">SCORE: <span id="score"></span></div>
-    <div class="game-over" id="game-over">
-      GAME OVER
-      <p><span id="restart">Restart</span></p>
+
+    <div class="play-view">
+      <div class="score" id="score">
+        SCORE: <span id="score-counter">0</span>
+      </div>
+      <div class="pause-game" id="pause-game">
+        <button id="btn-pause">
+          Pause
+        </button>
+      </div>
+
+      <div class="game-over" id="game-over">
+        GAME OVER
+        <p><button id="btn-restart">Restart</button></p>
+      </div>
+
+      <div class="loading" id="loading">
+        <p>LOADING...</p>
+      </div>
     </div>
-    <div class="loading" id="loading">LOADING...<p>Please wait</p></div>
   </body>
 </html>
