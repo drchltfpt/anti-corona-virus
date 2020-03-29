@@ -6,14 +6,23 @@ import ImageRepo from "../repos/ImageRepo";
 class Enemy extends Drawable {
   constructor(x, y, width, height) {
     super(x, y, 0, width, height);
-    this.chance = 0;
-    this.percentFire = 0.01;
-    this.alive = false; // Is true if the bullet is currently in use
-    this.type = "enemy";
-    this.collidableWith = "bullet";
+
+    this.percentFire = 0.01; // constant
+    this.type = "enemy"; // constant
+    this.collidableWith = "bullet"; // constant
 
     this.explosion = new SoundPool(10);
     this.explosion.init("explosion");
+
+    this.alive = false; // Is true if the bullet is currently in use
+    this.chance = 0;
+  }
+
+  reset(x, y) {
+    this.x = x;
+    this.y = y;
+    this.alive = false;
+    this.chance = 0;
   }
 
   /*
@@ -58,9 +67,7 @@ class Enemy extends Drawable {
       }
       return false;
     } else {
-      console.log('after enenmy', this.user.score)
       this.user.score += 10;
-      console.log('before enenmy', this.user.score) 
       this.explosion.get();
       return true;
     }
@@ -70,7 +77,11 @@ class Enemy extends Drawable {
    * Fires a bullet
    */
   fire() {
-    this.enemyBulletPool.get(this.x + this.width / 2, this.y + this.height, -2.5);
+    this.enemyBulletPool.get(
+      this.x + this.width / 2,
+      this.y + this.height,
+      -2.5
+    );
   }
 
   /*

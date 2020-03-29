@@ -11,17 +11,49 @@ import KeyboardController from "../controller/KeyboardController";
 export default class Ship extends Drawable {
   constructor(x, y, width, height) {
     super(x, y, 3, width, height);
+
     this.bulletPool = new BulletPool(30);
     this.bulletPool.init();
 
     this.laser = new SoundPool(10);
     this.laser.init("laser");
 
-    this.counter = 0;
-    this.fireRate = 15;
-    this.collidableWith = "enemyBullet";
-    this.type = "ship";
+    this.fireRate = 15; // constant
+    this.collidableWith = "enemyBullet"; // constant
+    this.type = "ship"; // constant
+
     this.alive = true;
+    this.counter = 0;
+  }
+
+  static getShip() {
+    console.log("canvasWidth: ", Ship.prototype.canvasWidth);
+    // Set the ship to start near the bottom middle of the canvas
+    const shipStartX =
+      Ship.prototype.canvasWidth / 2 - ImageRepo.spaceship.width;
+    const shipStartY =
+      (Ship.prototype.canvasHeight / 4) * 3 + ImageRepo.spaceship.height * 2;
+
+    return new Ship(
+      shipStartX,
+      shipStartY,
+      ImageRepo.spaceship.width,
+      ImageRepo.spaceship.height
+    );
+  }
+
+  reset() {
+    const shipStartX = this.canvasWidth / 2 - ImageRepo.spaceship.width;
+    const shipStartY =
+      (this.canvasHeight / 4) * 3 + ImageRepo.spaceship.height * 2;
+
+    this.x = shipStartX;
+    this.y = shipStartY;
+    this.alive = true;
+    this.isColliding = false;
+    this.counter = 0;
+
+    this.bulletPool.reset();
   }
 
   draw() {
@@ -62,17 +94,21 @@ export default class Ship extends Drawable {
         if (this.y >= this.canvasHeight - this.height)
           this.y = this.canvasHeight - this.height;
       }
-
-      // Finish by redrawing the ship
-      if (!this.isColliding) {
-        this.draw();
-      } else {
-        this.alive = false;
-        return false;
-      }
     }
 
-    if (KeyboardController.KEY_STATUS.space && this.counter >= this.fireRate && !this.isColliding) {
+    // Finish by redrawing the ship
+    if (!this.isColliding) {
+      this.draw();
+    } else {
+      this.alive = false;
+      return false;
+    }
+
+    if (
+      KeyboardController.KEY_STATUS.space &&
+      this.counter >= this.fireRate &&
+      !this.isColliding
+    ) {
       this.fire();
       this.counter = 0;
     }

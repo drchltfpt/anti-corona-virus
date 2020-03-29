@@ -21,7 +21,6 @@ class BulletPool extends Pool {
         "bullet"
       );
       bullet.collidableWith = "enemy";
-      bullet.type = "bullet";
 
       this.pool.push(bullet);
     }

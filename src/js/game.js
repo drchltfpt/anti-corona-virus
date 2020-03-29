@@ -1,10 +1,10 @@
+import FlowGame from "./FlowGame";
 import Background from "./models/Background";
 import Ship from "./models/Ship";
 import Bullet from "./models/Bullet";
 import Enemy from "./models/Enemy";
 import EnemyPool from "./models/EnemyPool";
 import EnemyBulletPool from "./models/EnemyBulletPool";
-import Pool from "./models/Pool";
 import QuadTree from "./models/QuadTree";
 import SoundPool from "./models/SoundPool";
 import PlayView from "./views/PlayView";
@@ -12,8 +12,10 @@ import PlayView from "./views/PlayView";
 import ImageRepo from "./repos/ImageRepo";
 import User from "./models/user";
 
-export default class Game {
+export default class Game extends FlowGame {
   constructor() {
+    super();
+
     this.isGameOver = false;
     this.bgCanvas = document.getElementById("background");
     this.shipCanvas = document.getElementById("ship");
@@ -68,16 +70,7 @@ export default class Game {
       this.gameOverAudio.volume = 0.25;
       this.gameOverAudio.load();
 
-      // Set the ship to start near the bottom middle of the canvas
-      const shipStartX = this.shipCanvas.width / 2 - ImageRepo.spaceship.width;
-      const shipStartY =
-        (this.shipCanvas.height / 4) * 3 + ImageRepo.spaceship.height * 2;
-      this.ship = new Ship(
-        shipStartX,
-        shipStartY,
-        ImageRepo.spaceship.width,
-        ImageRepo.spaceship.height
-      );
+      this.ship = Ship.getShip();
 
       // Initialize the enemy pool object
       this.enemyBulletPool = new EnemyBulletPool(50);
@@ -121,11 +114,6 @@ export default class Game {
     });
   }
 
-  doAfterInit() {
-    this.ship.draw();
-    this.backgroundAudio.play();
-  }
-
   /**
    * Ensure the game sound has loaded before starting the game
    */
@@ -135,9 +123,14 @@ export default class Game {
       this.backgroundAudio.readyState === 4
     ) {
       window.clearInterval(this.checkAudio);
-      document.getElementById('loading').style.display = "none";
+      document.getElementById("loading").style.display = "none";
       resolve(true);
     }
+  }
+
+  doAfterInit() {
+    this.ship.draw();
+    this.backgroundAudio.play();
   }
 
   beforeRender() {
@@ -149,6 +142,10 @@ export default class Game {
     this.quadTree.insert(this.enemyBulletPool.getPool());
     this.detectCollision();
     document.getElementById("score").innerHTML = this.user.score;
+  }
+
+  renderCondition() {
+    return this.ship.alive;
   }
 
   render() {
@@ -217,9 +214,10 @@ export default class Game {
   }
 
   // Restart the game
-  restart() {
+  async restart() {
     this.gameOverAudio.pause();
     document.getElementById("game-over").style.display = "none";
+
     this.bgContext.clearRect(0, 0, this.bgCanvas.width, this.bgCanvas.height);
     this.shipContext.clearRect(
       0,
@@ -239,24 +237,16 @@ export default class Game {
     this.background.reset();
 
     // Set the ship to start near the bottom middle of the canvas
-    const shipStartX = this.shipCanvas.width / 2 - ImageRepo.spaceship.width;
-    const shipStartY =
-      (this.shipCanvas.height / 4) * 3 + ImageRepo.spaceship.height * 2;
-    this.ship = new Ship(
-      shipStartX,
-      shipStartY,
-      ImageRepo.spaceship.width,
-      ImageRepo.spaceship.height
-    );
-    this.ship.draw();
+    this.ship.reset();
 
-    this.enemyPool.init();
+    this.enemyPool.reset();
+
     this.spawnWave();
-    this.enemyBulletPool.init();
-
-    this.user.score = 0;
+    this.enemyBulletPool.reset();
+    this.user.resetScore();
 
     this.backgroundAudio.currentTime = 0;
-    this.backgroundAudio.play();
+
+    await this.reSetup();
   }
 }

@@ -17,7 +17,7 @@ class EnemyPool extends Pool {
         0,
         0,
         ImageRepo.enemy.width,
-        ImageRepo.enemy.height,
+        ImageRepo.enemy.height
       );
 
       this.pool.push(enemy);

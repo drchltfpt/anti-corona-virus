@@ -11,6 +11,12 @@ class Bullet extends Drawable {
     this.type = type;
   }
 
+  reset(x, y) {
+    this.x = x;
+    this.y = y;
+    this.alive = false;
+  }
+
   /*
    * Uses a "dirty rectangle" to erase the bullet and moves it.
    * Returns true if the bullet moved off the screen, indicating that
@@ -18,9 +24,14 @@ class Bullet extends Drawable {
    * the bullet.
    */
   draw() {
-    this.context.clearRect(this.x - 1, this.y - 1, this.width + 2, this.height + 2);
+    this.context.clearRect(
+      this.x - 1,
+      this.y - 1,
+      this.width + 2,
+      this.height + 2
+    );
     this.y -= this.speed;
-    
+
     if (this.isColliding) {
       return true;
     } else if (this.type === "bullet" && this.y <= 0 - this.height) {

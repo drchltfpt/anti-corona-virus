@@ -13,6 +13,12 @@ export default class Pool {
    */
   init() {}
 
+  reset() {
+    for (let i = 0; i < this.size; i++) {
+      this.pool[i].reset(0, 0);
+    }
+  }
+
   /*
    * Grabs the last item in the list and initializes it and
    * pushes it to the front of the array.

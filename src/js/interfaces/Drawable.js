@@ -15,15 +15,16 @@ class Drawable {
     this.height = height;
     this.collidableWith = "";
     this.isColliding = false;
-    this.type = ""
+    this.type = "";
   }
 
   // Define abstract function to be implemented in child objects
+  reset() {}
   draw() {}
   move() {}
   isCollidableWith(object) {
-    return (this.collidableWith === object.type);
-  } 
+    return this.collidableWith === object.type;
+  }
 }
 
 module.exports = Drawable;
