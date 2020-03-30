@@ -1,49 +1,61 @@
 import GameBase from "../interfaces/GameBase";
+
+import MainView from "../views/MainView";
+import PlayView from "../views/PlayView";
+
 import Background from "../models/Background";
-import Ship from "../models/Ship";
+import Doctor from "../models/Doctor";
 import Bullet from "../models/Bullet";
 import Enemy from "../models/Enemy";
-import EnemyPool from "../models/EnemyPool";
-import EnemyBulletPool from "../models/EnemyBulletPool";
-import QuadTree from "../models/QuadTree";
-import SoundPool from "../models/SoundPool";
-import MainView from "../views/MainView";
+import EnemyPool from "../pool/enemyPool";
+import EnemyBulletPool from "../pool/EnemyBulletPool";
+import QuadTree from "../utils/quadTree";
+import SoundPool from "../pool/soundPool";
+import User from "../models/User";
 
 import ImageRepo from "../repos/ImageRepo";
-import User from "../models/user";
+
 import Helper from "../utils/Helper";
 
 export default class GameController extends GameBase {
   constructor() {
     super();
 
+    // Init Views
+    this.mainView = new MainView(
+      this.restart.bind(this),
+      this.pause.bind(this),
+      this.resume.bind(this)
+    );
+
+    this.playView = new PlayView();
+
+    // Init status of game
+
     this.isGameOver = false;
     this.pauseStatus = false;
 
-    this.bgCanvas = document.getElementById("background");
-    this.shipCanvas = document.getElementById("ship");
-    this.mainCanvas = document.getElementById("main");
-
-    this.bgContext = this.bgCanvas.getContext("2d");
-    this.shipContext = this.shipCanvas.getContext("2d");
-    this.mainContext = this.mainCanvas.getContext("2d");
+    // Init context for drawing from play view
+    this.bgContext = this.playView.bgContext;
+    this.shipContext = this.playView.shipContext;
+    this.mainContext = this.playView.mainContext;
 
     // Initialize objects to contain their context and canvas information
     Background.prototype.context = this.bgContext;
-    Background.prototype.canvasWidth = this.bgCanvas.width;
-    Background.prototype.canvasHeight = this.bgCanvas.height;
+    Background.prototype.canvasWidth = this.playView.bgCanvas.width;
+    Background.prototype.canvasHeight = this.playView.bgCanvas.height;
 
-    Ship.prototype.context = this.shipContext;
-    Ship.prototype.canvasWidth = this.shipCanvas.width;
-    Ship.prototype.canvasHeight = this.shipCanvas.height;
+    Doctor.prototype.context = this.shipContext;
+    Doctor.prototype.canvasWidth = this.playView.shipCanvas.width;
+    Doctor.prototype.canvasHeight = this.playView.shipCanvas.height;
 
     Bullet.prototype.context = this.mainContext;
-    Bullet.prototype.canvasWidth = this.mainCanvas.width;
-    Bullet.prototype.canvasHeight = this.mainCanvas.height;
+    Bullet.prototype.canvasWidth = this.playView.mainCanvas.width;
+    Bullet.prototype.canvasHeight = this.playView.mainCanvas.height;
 
     Enemy.prototype.context = this.mainContext;
-    Enemy.prototype.canvasWidth = this.mainCanvas.width;
-    Enemy.prototype.canvasHeight = this.mainCanvas.height;
+    Enemy.prototype.canvasWidth = this.playView.mainCanvas.width;
+    Enemy.prototype.canvasHeight = this.playView.mainCanvas.height;
   }
 
   init() {
@@ -52,8 +64,8 @@ export default class GameController extends GameBase {
         0,
         0,
         1,
-        this.bgCanvas.width,
-        this.bgCanvas.height,
+        this.playView.bgCanvas.width,
+        this.playView.bgCanvas.height,
         this.bgContext
       );
 
@@ -74,7 +86,7 @@ export default class GameController extends GameBase {
       this.gameOverAudio.load();
 
       // Get Ship
-      this.ship = Ship.getShip();
+      this.doctor = Doctor.createDoctor();
 
       // Initialize the enemy pool object
       this.enemyBulletPool = new EnemyBulletPool(50);
@@ -93,16 +105,9 @@ export default class GameController extends GameBase {
       this.quadTree = new QuadTree({
         x: 0,
         y: 0,
-        width: this.mainCanvas.width,
-        height: this.mainCanvas.height
+        width: this.playView.mainCanvas.width,
+        height: this.playView.mainCanvas.height
       });
-
-      // Init Views
-      this.mainView = new MainView(
-        this.restart.bind(this),
-        this.pause.bind(this),
-        this.resume.bind(this)
-      );
 
       await Helper.sleep(1000);
       this.checkAudio = window.setInterval(() => {
@@ -178,15 +183,15 @@ export default class GameController extends GameBase {
   }
 
   doAfterInit() {
-    this.ship.draw();
+    this.doctor.draw();
     this.backgroundAudio.play();
   }
 
   beforeRender() {
     // Insert objects into quadtree
     this.quadTree.clear();
-    this.quadTree.insert(this.ship);
-    this.quadTree.insert(this.ship.bulletPool.getPool());
+    this.quadTree.insert(this.doctor);
+    this.quadTree.insert(this.doctor.bulletPool.getPool());
     this.quadTree.insert(this.enemyPool.getPool());
     this.quadTree.insert(this.enemyBulletPool.getPool());
     this.detectCollision();
@@ -194,7 +199,7 @@ export default class GameController extends GameBase {
   }
 
   renderCondition() {
-    return this.ship.alive;
+    return this.doctor.alive;
   }
 
   isPause() {
@@ -203,11 +208,11 @@ export default class GameController extends GameBase {
 
   render() {
     this.background.draw();
-    this.isGameOver = !this.ship.move();
+    this.isGameOver = !this.doctor.move();
     if (this.isGameOver) {
       this.gameOver();
     }
-    this.ship.animateBulletBool();
+    this.doctor.animateBulletBool();
     this.enemyPool.animate();
     this.enemyBulletPool.animate();
 
@@ -230,18 +235,23 @@ export default class GameController extends GameBase {
     this.gameOverAudio.pause();
     this.mainView.hideGameOver();
 
-    this.bgContext.clearRect(0, 0, this.bgCanvas.width, this.bgCanvas.height);
+    this.bgContext.clearRect(
+      0,
+      0,
+      this.playView.bgCanvas.width,
+      this.playView.bgCanvas.height
+    );
     this.shipContext.clearRect(
       0,
       0,
-      this.shipCanvas.width,
-      this.shipCanvas.height
+      this.playView.shipCanvas.width,
+      this.playView.shipCanvas.height
     );
     this.mainContext.clearRect(
       0,
       0,
-      this.mainCanvas.width,
-      this.mainCanvas.height
+      this.playView.mainCanvas.width,
+      this.playView.mainCanvas.height
     );
 
     this.quadTree.clear();
@@ -249,7 +259,7 @@ export default class GameController extends GameBase {
     this.background.reset();
 
     // Set the ship to start near the bottom middle of the canvas
-    this.ship.reset();
+    this.doctor.reset();
 
     this.enemyPool.reset();
 

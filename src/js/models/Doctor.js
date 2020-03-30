@@ -1,6 +1,6 @@
 import Drawable from "../interfaces/Drawable";
-import BulletPool from "../models/BulletPool";
-import SoundPool from "../models/SoundPool";
+import DotorBulletPool from "../pool/DoctorBullletPool";
+import SoundPool from "../pool/soundPool";
 import ImageRepo from "../repos/ImageRepo";
 import KeyboardController from "../controller/KeyboardController";
 /**
@@ -8,23 +8,23 @@ import KeyboardController from "../controller/KeyboardController";
  * drawn on the "ship" canvas and uses dirty rectangles to move
  * around the screen.
  */
-export default class Ship extends Drawable {
+export default class Doctor extends Drawable {
   constructor(x, y, width, height) {
     super(x, y, 3, width, height);
 
     this.bulletTypes = ["leukocyte", "antibiotic", "vaccine", "vitaminC"];
     this.activeBulletTypeIndex = 0;
 
-    this.leukocytePool = new BulletPool(30);
+    this.leukocytePool = new DotorBulletPool(30);
     this.leukocytePool.init("leukocyte");
 
-    this.antibioticPool = new BulletPool(30);
+    this.antibioticPool = new DotorBulletPool(30);
     this.antibioticPool.init("antibiotic");
 
-    this.vaccinePool = new BulletPool(30);
+    this.vaccinePool = new DotorBulletPool(30);
     this.vaccinePool.init("vaccine");
 
-    this.vitaminCPool = new BulletPool(30);
+    this.vitaminCPool = new DotorBulletPool(30);
     this.vitaminCPool.init("vitaminC");
 
     this.bulletPool = this.leukocytePool;
@@ -34,20 +34,20 @@ export default class Ship extends Drawable {
 
     this.fireRate = 15; // constant
     this.collidableWith = "enemyBullet"; // constant
-    this.type = "ship"; // constant
+    this.type = "doctor"; // constant
 
     this.alive = true;
     this.counter = 0;
   }
 
-  static getShip() {
+  static createDoctor() {
     // Set the ship to start near the bottom middle of the canvas
     const shipStartX =
-      Ship.prototype.canvasWidth / 2 - ImageRepo.spaceship.width;
+      Doctor.prototype.canvasWidth / 2 - ImageRepo.spaceship.width;
     const shipStartY =
-      (Ship.prototype.canvasHeight / 4) * 3 + ImageRepo.spaceship.height * 2;
+      (Doctor.prototype.canvasHeight / 4) * 3 + ImageRepo.spaceship.height * 2;
 
-    return new Ship(
+    return new Doctor(
       shipStartX,
       shipStartY,
       ImageRepo.spaceship.width,
@@ -73,7 +73,10 @@ export default class Ship extends Drawable {
     this.isColliding = false;
     this.counter = 0;
 
-    this.bulletPool.reset();
+    this.leukocytePool.reset();
+    this.antibioticPool.reset();
+    this.vaccinePool.reset();
+    this.vitaminCPool.reset();
   }
 
   draw() {
@@ -117,6 +120,7 @@ export default class Ship extends Drawable {
     }
 
     // Finish by redrawing the ship
+    console.log("Doctor collision: ", this.isColliding);
     if (!this.isColliding) {
       this.draw();
     } else {
@@ -133,9 +137,8 @@ export default class Ship extends Drawable {
       this.counter = 0;
     }
 
-    if (KeyboardController.KEY_STATUS.tab &&
-      !this.isColliding)  {
-        console.log('TAB ', this.activeBulletTypeIndex)
+    if (KeyboardController.KEY_STATUS.tab && !this.isColliding) {
+      console.log("TAB: ", this.activeBulletTypeIndex);
       this.changeBulletType();
       KeyboardController.KEY_STATUS.tab = false;
     }
@@ -161,10 +164,12 @@ export default class Ship extends Drawable {
 
     this.bulletPool.getTwo(this.x + 6, this.y, 3, this.x + 33, this.y, 3);
     // this.bulletPool.get(this.x + 19.5, this.y, 3);
+
     this.laser.get();
   }
 
   changeBulletType() {
-    this.activeBulletTypeIndex = (this.activeBulletTypeIndex + 1) % this.bulletTypes.length;
+    this.activeBulletTypeIndex =
+      (this.activeBulletTypeIndex + 1) % this.bulletTypes.length;
   }
 }

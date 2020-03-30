@@ -10,8 +10,6 @@
  */
 class QuadTree {
   constructor(boundBox, lvl) {
-    this.boundBox = boundBox;
-    this.lvl = lvl;
     this.maxObjects = 10;
     this.bounds = boundBox || {
       x: 0,

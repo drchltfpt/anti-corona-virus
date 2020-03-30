@@ -1,6 +1,5 @@
-import Pool from "./Pool";
-import Bullet from "./Bullet";
-import ImageRepo from "../repos/ImageRepo";
+import Pool from ".";
+import EnemyBullet from "../models/EnemyBullet";
 
 class EnemyBulletPool extends Pool {
   constructor(maxSize) {
@@ -13,14 +12,7 @@ class EnemyBulletPool extends Pool {
   init() {
     for (let i = 0; i < this.size; i++) {
       // Initalize the bullet object
-      const bullet = new Bullet(
-        0,
-        0,
-        ImageRepo.enemyBullet.width,
-        ImageRepo.enemyBullet.height,
-        "enemyBullet"
-      );
-      bullet.collidableWith = "ship";
+      const bullet = new EnemyBullet(0, 0);
 
       this.pool.push(bullet);
     }

@@ -1,6 +1,6 @@
 import Drawable from "../interfaces/Drawable";
-import Pool from "./Pool";
-import SoundPool from "../models/SoundPool";
+import Pool from "../pool";
+import SoundPool from "../pool/soundPool";
 import ImageRepo from "../repos/ImageRepo";
 
 class Enemy extends Drawable {

@@ -1,5 +1,5 @@
-import Pool from "./Pool";
-import Enemy from "./Enemy";
+import Pool from ".";
+import Enemy from "../models/Enemy";
 import ImageRepo from "../repos/ImageRepo";
 
 class EnemyPool extends Pool {
@@ -18,7 +18,7 @@ class EnemyPool extends Pool {
         0,
         ImageRepo.virus.width,
         ImageRepo.virus.height,
-        i % 2 ? "virus": "bacterias"
+        i % 2 ? "virus" : "bacterias"
       );
 
       this.pool.push(enemy);

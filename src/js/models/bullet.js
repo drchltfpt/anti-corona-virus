@@ -1,14 +1,14 @@
 import Drawable from "../interfaces/Drawable";
-import ImageRepo from "../repos/ImageRepo";
 /**
  * Creates the Bullet object which the ship fires. The bullets are
  * drawn on the "main" canvas.
  */
 class Bullet extends Drawable {
-  constructor(x, y, width, height, type) {
+  constructor(x, y, width, height, type, image) {
     super(x, y, 0, width, height);
     this.alive = false; // Is true if the bullet is currently in use
     this.type = type;
+    this.image = image;
   }
 
   reset(x, y) {
@@ -34,28 +34,10 @@ class Bullet extends Drawable {
 
     if (this.isColliding) {
       return true;
-    } else if (this.type === "vitaminC" && this.y <= 0 - this.height) {
-      return true;
-    } else if (this.type === "antibiotic" && this.y <= 0 - this.height) {
-      return true;
-    } else if (this.type === "vaccine" && this.y <= 0 - this.height) {
-      return true;
-    } else if (this.type === "leukocyte" && this.y <= 0 - this.height) {
-      return true;
-    } else if (this.type === "enemyBullet" && this.y >= this.canvasHeight) {
+    } else if (this.y <= 0 - this.height) {
       return true;
     } else {
-      if (this.type === "vitaminC") {
-        this.context.drawImage(ImageRepo.vitaminC, this.x, this.y);
-      } else if (this.type === "antibiotic") {
-        this.context.drawImage(ImageRepo.antibiotic, this.x, this.y);
-      } else if (this.type === "vaccine") {
-        this.context.drawImage(ImageRepo.vaccine, this.x, this.y);
-      } else if (this.type === "leukocyte") {
-        this.context.drawImage(ImageRepo.leukocyte, this.x, this.y);
-      } else if (this.type === "enemyBullet") {
-        this.context.drawImage(ImageRepo.enemyBullet, this.x, this.y);
-      }
+      this.context.drawImage(this.image, this.x, this.y);
       return false;
     }
   }
