@@ -1,4 +1,4 @@
-class PlayView {
+class MainView {
   constructor(restartGameFunc, pauseGameFunc, resumeGameFunc) {
     this.restartGameFunc = restartGameFunc;
     this.pauseGameFunc = pauseGameFunc;
@@ -71,4 +71,4 @@ class PlayView {
   }
 }
 
-export default PlayView;
+export default MainView;

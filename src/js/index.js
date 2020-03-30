@@ -1,8 +1,8 @@
 import "../css/index.css";
-import Game from "./Game";
+import GameController from "./controller/GameController";
 
 window.onload = async () => {
-  const game = new Game();
+  const game = new GameController();
 
   await game.setup();
 };

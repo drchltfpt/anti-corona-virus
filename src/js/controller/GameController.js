@@ -1,19 +1,19 @@
-import FlowGame from "./FlowGame";
-import Background from "./models/Background";
-import Ship from "./models/Ship";
-import Bullet from "./models/Bullet";
-import Enemy from "./models/Enemy";
-import EnemyPool from "./models/EnemyPool";
-import EnemyBulletPool from "./models/EnemyBulletPool";
-import QuadTree from "./models/QuadTree";
-import SoundPool from "./models/SoundPool";
-import PlayView from "./views/PlayView";
+import GameBase from "../interfaces/GameBase";
+import Background from "../models/Background";
+import Ship from "../models/Ship";
+import Bullet from "../models/Bullet";
+import Enemy from "../models/Enemy";
+import EnemyPool from "../models/EnemyPool";
+import EnemyBulletPool from "../models/EnemyBulletPool";
+import QuadTree from "../models/QuadTree";
+import SoundPool from "../models/SoundPool";
+import MainView from "../views/MainView";
 
-import ImageRepo from "./repos/ImageRepo";
-import User from "./models/user";
-import Helper from "./utils/Helper";
+import ImageRepo from "../repos/ImageRepo";
+import User from "../models/user";
+import Helper from "../utils/Helper";
 
-export default class Game extends FlowGame {
+export default class GameController extends GameBase {
   constructor() {
     super();
 
@@ -73,6 +73,7 @@ export default class Game extends FlowGame {
       this.gameOverAudio.volume = 0.25;
       this.gameOverAudio.load();
 
+      // Get Ship
       this.ship = Ship.getShip();
 
       // Initialize the enemy pool object
@@ -88,7 +89,7 @@ export default class Game extends FlowGame {
       this.user = new User(1, 0);
       Enemy.prototype.user = this.user;
 
-      // Start QuadTree
+      // Start QuadTree for detecting collision
       this.quadTree = new QuadTree({
         x: 0,
         y: 0,
@@ -97,7 +98,7 @@ export default class Game extends FlowGame {
       });
 
       // Init Views
-      this.playView = new PlayView(
+      this.mainView = new MainView(
         this.restart.bind(this),
         this.pause.bind(this),
         this.resume.bind(this)
@@ -120,49 +121,9 @@ export default class Game extends FlowGame {
     ) {
       window.clearInterval(this.checkAudio);
 
-      this.playView.hideLoading();
+      this.mainView.hideLoading();
 
       resolve(true);
-    }
-  }
-
-  doAfterInit() {
-    this.ship.draw();
-    this.backgroundAudio.play();
-  }
-
-  beforeRender() {
-    // Insert objects into quadtree
-    this.quadTree.clear();
-    this.quadTree.insert(this.ship);
-    this.quadTree.insert(this.ship.bulletPool.getPool());
-    this.quadTree.insert(this.enemyPool.getPool());
-    this.quadTree.insert(this.enemyBulletPool.getPool());
-    this.detectCollision();
-    this.playView.updateScoreCounter(this.user.score);
-  }
-
-  renderCondition() {
-    return this.ship.alive;
-  }
-
-  isPause() {
-    return this.pauseStatus;
-  }
-
-  render() {
-    this.background.draw();
-    this.isGameOver = !this.ship.move();
-    if (this.isGameOver) {
-      this.gameOver();
-    }
-    this.ship.animateBulletBool();
-    this.enemyPool.animate();
-    this.enemyBulletPool.animate();
-
-    // No more enemies
-    if (this.enemyPool.getPool().length === 0) {
-      this.spawnWave();
     }
   }
 
@@ -213,7 +174,47 @@ export default class Game extends FlowGame {
     this.gameOverAudio.currentTime = 0;
     this.gameOverAudio.play();
 
-    this.playView.showGameOver();
+    this.mainView.showGameOver();
+  }
+
+  doAfterInit() {
+    this.ship.draw();
+    this.backgroundAudio.play();
+  }
+
+  beforeRender() {
+    // Insert objects into quadtree
+    this.quadTree.clear();
+    this.quadTree.insert(this.ship);
+    this.quadTree.insert(this.ship.bulletPool.getPool());
+    this.quadTree.insert(this.enemyPool.getPool());
+    this.quadTree.insert(this.enemyBulletPool.getPool());
+    this.detectCollision();
+    this.mainView.updateScoreCounter(this.user.score);
+  }
+
+  renderCondition() {
+    return this.ship.alive;
+  }
+
+  isPause() {
+    return this.pauseStatus;
+  }
+
+  render() {
+    this.background.draw();
+    this.isGameOver = !this.ship.move();
+    if (this.isGameOver) {
+      this.gameOver();
+    }
+    this.ship.animateBulletBool();
+    this.enemyPool.animate();
+    this.enemyBulletPool.animate();
+
+    // No more enemies
+    if (this.enemyPool.getPool().length === 0) {
+      this.spawnWave();
+    }
   }
 
   pause() {
@@ -227,7 +228,7 @@ export default class Game extends FlowGame {
   // Restart the game
   restart() {
     this.gameOverAudio.pause();
-    this.playView.hideGameOver();
+    this.mainView.hideGameOver();
 
     this.bgContext.clearRect(0, 0, this.bgCanvas.width, this.bgCanvas.height);
     this.shipContext.clearRect(

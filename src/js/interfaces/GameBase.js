@@ -1,4 +1,4 @@
-export default class FlowGame {
+export default class GameBase {
   constructor() {}
 
   async init() {}
