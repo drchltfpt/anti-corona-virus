@@ -13,7 +13,7 @@ class Drawable {
     this.speed = speed;
     this.width = width;
     this.height = height;
-    this.collidableWith = "";
+    this.collidableWith = [];
     this.isColliding = false;
     this.type = "";
   }
@@ -22,8 +22,9 @@ class Drawable {
   reset() {}
   draw() {}
   move() {}
+
   isCollidableWith(object) {
-    return this.collidableWith === object.type;
+    return this.collidableWith.includes(object.type);
   }
 }
 

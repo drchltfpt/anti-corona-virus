@@ -11,6 +11,6 @@ export default class Vaccine extends Bullet {
       "vaccine",
       ImageRepo.vaccine
     );
-    this.collidableWith = "virus";
+    this.collidableWith = ["virus"];
   }
 }

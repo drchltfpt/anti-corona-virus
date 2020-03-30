@@ -1,6 +1,6 @@
 import Drawable from "../interfaces/Drawable";
 import DotorBulletPool from "../pool/DoctorBullletPool";
-import SoundPool from "../pool/soundPool";
+import SoundPool from "../pool/SoundPool";
 import ImageRepo from "../repos/ImageRepo";
 import KeyboardController from "../controller/KeyboardController";
 /**
@@ -33,7 +33,7 @@ export default class Doctor extends Drawable {
     this.laser.init("laser");
 
     this.fireRate = 15; // constant
-    this.collidableWith = "enemyBullet"; // constant
+    this.collidableWith = ["enemyBullet"]; // constant
     this.type = "doctor"; // constant
 
     this.alive = true;

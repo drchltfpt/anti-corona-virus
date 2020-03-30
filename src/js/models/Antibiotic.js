@@ -11,6 +11,6 @@ export default class Antibiotic extends Bullet {
       "antibiotic",
       ImageRepo.antibiotic
     );
-    this.collidableWith = "bacterias";
+    this.collidableWith = ["bacterias"];
   }
 }

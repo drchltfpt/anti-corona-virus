@@ -1,6 +1,6 @@
 import Pool from ".";
-import Enemy from "../models/Enemy";
-import ImageRepo from "../repos/ImageRepo";
+import Virus from "../models/Virus";
+import Bacteria from "../models/Bacteria";
 
 class EnemyPool extends Pool {
   constructor(maxSize) {
@@ -11,15 +11,17 @@ class EnemyPool extends Pool {
    * Populates the pool array with Bullet objects
    */
   init() {
+    let EnemyClass, enemy;
+
     for (let i = 0; i < this.size; i++) {
       // Initalize the bullet object
-      const enemy = new Enemy(
-        0,
-        0,
-        ImageRepo.virus.width,
-        ImageRepo.virus.height,
-        i % 2 ? "virus" : "bacterias"
-      );
+      if (i % 2 === 0) {
+        EnemyClass = Virus;
+      } else {
+        EnemyClass = Bacteria;
+      }
+
+      enemy = new EnemyClass(0, 0);
 
       this.pool.push(enemy);
     }

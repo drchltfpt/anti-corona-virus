@@ -1,15 +1,13 @@
 import Drawable from "../interfaces/Drawable";
-import Pool from "../pool";
-import SoundPool from "../pool/soundPool";
-import ImageRepo from "../repos/ImageRepo";
+import SoundPool from "../pool/SoundPool";
 
 class Enemy extends Drawable {
-  constructor(x, y, width, height, type) {
+  constructor(x, y, width, height, type, image) {
     super(x, y, 0, width, height);
     this.type = type;
+    this.image = image;
 
     this.percentFire = 0.01; // constant
-    this.collidableWith = "bullet"; // constant
 
     this.explosion = new SoundPool(10);
     this.explosion.init("explosion");
@@ -59,11 +57,8 @@ class Enemy extends Drawable {
     }
 
     if (!this.isColliding) {
-      if (this.type == "bacterias") {
-        this.context.drawImage(ImageRepo.bacterias, this.x, this.y);
-      } else if (this.type == "virus") {
-        this.context.drawImage(ImageRepo.virus, this.x, this.y);
-      }
+      this.context.drawImage(this.image, this.x, this.y);
+
       // Enemy has a chance to shoot every movement
       this.chance = Math.floor(Math.random() * 101);
       if (this.chance / 100 < this.percentFire) {

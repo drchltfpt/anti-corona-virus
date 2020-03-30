@@ -11,6 +11,6 @@ export default class Leukocyte extends Bullet {
       "leukocyte",
       ImageRepo.leukocyte
     );
-    this.collidableWith = "bacterias";
+    this.collidableWith = ["bacterias"];
   }
 }

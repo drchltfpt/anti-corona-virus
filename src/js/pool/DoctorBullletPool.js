@@ -35,11 +35,6 @@ export default class DoctorBulletPool extends Pool {
     for (let i = 0; i < this.size; i++) {
       // Initalize the bullet object
       const bullet = new BulletClass(0, 0);
-
-      // bulletType == "vaccine"
-      //   ? (bullet.collidableWith = "virus")
-      //   : (bullet.collidableWith = "bacterias");
-
       this.pool.push(bullet);
     }
   }

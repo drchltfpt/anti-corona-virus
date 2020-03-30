@@ -7,10 +7,10 @@ import Background from "../models/Background";
 import Doctor from "../models/Doctor";
 import Bullet from "../models/Bullet";
 import Enemy from "../models/Enemy";
-import EnemyPool from "../pool/enemyPool";
+import EnemyPool from "../pool/EnemyPool";
 import EnemyBulletPool from "../pool/EnemyBulletPool";
 import QuadTree from "../utils/quadTree";
-import SoundPool from "../pool/soundPool";
+import SoundPool from "../pool/SoundPool";
 import User from "../models/User";
 
 import ImageRepo from "../repos/ImageRepo";
@@ -143,7 +143,7 @@ export default class GameController extends GameBase {
       for (let y = 0; y < obj.length; y++) {
         // DETECT COLLISION ALGORITHM
         if (
-          objects[x].collidableWith === obj[y].type &&
+          objects[x].isCollidableWith(obj[y]) &&
           objects[x].x < obj[y].x + obj[y].width &&
           objects[x].x + objects[x].width > obj[y].x &&
           objects[x].y < obj[y].y + obj[y].height &&

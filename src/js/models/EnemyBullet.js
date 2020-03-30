@@ -11,7 +11,7 @@ export default class EnemyBullet extends Bullet {
       "enemyBullet",
       ImageRepo.enemyBullet
     );
-    this.collidableWith = "doctor";
+    this.collidableWith = ["doctor"];
   }
 
   draw() {
