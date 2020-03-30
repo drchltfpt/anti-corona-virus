@@ -1,12 +1,16 @@
 import Bullet from "./Bullet";
 import ImageRepo from "../repos/ImageRepo";
 
-const width = ImageRepo.enemyBullet.width;
-const height = ImageRepo.enemyBullet.height;
-
 export default class EnemyBullet extends Bullet {
   constructor(x, y) {
-    super(x, y, width, height, "enemyBullet", ImageRepo.enemyBullet);
+    super(
+      x,
+      y,
+      ImageRepo.enemyBullet.width,
+      ImageRepo.enemyBullet.height,
+      "enemyBullet",
+      ImageRepo.enemyBullet
+    );
     this.collidableWith = "doctor";
   }
 

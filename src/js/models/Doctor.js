@@ -120,7 +120,6 @@ export default class Doctor extends Drawable {
     }
 
     // Finish by redrawing the ship
-    console.log("Doctor collision: ", this.isColliding);
     if (!this.isColliding) {
       this.draw();
     } else {
