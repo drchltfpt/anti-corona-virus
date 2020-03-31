@@ -21,12 +21,13 @@ export default class GameBase {
     // Any setup that is required that only runs once before game loads goes here
     if (isInitOk) {
       // await this.sleep(1000);
-      this.doAfterInit();
-      this.gameLoop();
+      this.beforeStartGame();
     }
   }
 
-  reSetup() {
+  beforeStartGame() {}
+
+  startGame() {
     this.doAfterInit();
     this.gameLoop();
   }

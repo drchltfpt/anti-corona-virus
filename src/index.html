@@ -16,7 +16,26 @@
          one forth the screen.) -->
     <canvas id="ship" width="600" height="360"></canvas>
 
-    <div class="play-view">
+    <div class="main-view">
+      <div class="menu-option" id="menu-option">
+        <div>
+          <input
+            type="text"
+            class="ip-username"
+            id="ip-username"
+            placeholder="Enter your name..."
+          />
+        </div>
+        <div class="mt-40">
+          <button id="btn-startGame" disabled>
+            Start Game
+          </button>
+        </div>
+        <div class="mt-60">
+          <p id="btn-view-high-score"><u>View high score</u></p>
+        </div>
+      </div>
+
       <div class="score" id="score">
         SCORE: <span id="score-counter">0</span>
       </div>

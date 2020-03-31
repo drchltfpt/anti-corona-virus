@@ -15,8 +15,17 @@ button {
   border: 2px solid #ffffff;
   outline: none;
 }
-button:hover {
-  color: #c1e769;
+button:disabled,
+button[disabled] {
+  cursor: not-allowed;
+}
+input {
+  padding: 8px;
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  font-size: 25px;
+  font-weight: normal;
 }
 canvas {
   padding: 0;
@@ -38,8 +47,14 @@ canvas {
 #ship {
   z-index: 0;
 }
+.mt-40 {
+  margin-top: 40px;
+}
+.mt-60 {
+  margin-top: 60px;
+}
 /** A. ====== PlayView ====== **/
-.play-view {
+.main-view {
   margin: auto;
   position: absolute;
   top: 0;
@@ -62,6 +77,40 @@ canvas {
 .loading p {
   font-weight: bold;
 }
+/* Menu option */
+.menu-option {
+  display: none;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #414141;
+  height: 100%;
+  padding-top: 15%;
+  text-align: center;
+}
+.menu-option input {
+  text-align: center;
+}
+.menu-option button {
+  background-color: #107c34;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+}
+.menu-option button:disabled,
+.menu-option button[disabled] {
+  color: #ffffff;
+  font-weight: normal;
+  background-color: #a5beab;
+}
+
+.menu-option p {
+  cursor: pointer;
+  font-size: 16px;
+}
+.menu-option p:hover {
+  color: #c1e769;
+}
+
 /* Score */
 .score {
   position: absolute;

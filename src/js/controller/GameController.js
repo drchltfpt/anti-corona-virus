@@ -9,7 +9,7 @@ import Bullet from "../models/Bullet";
 import Enemy from "../models/Enemy";
 import EnemyPool from "../pool/EnemyPool";
 import EnemyBulletPool from "../pool/EnemyBulletPool";
-import QuadTree from "../utils/quadTree";
+import QuadTree from "../utils/QuadTree";
 import SoundPool from "../pool/SoundPool";
 import User from "../models/User";
 
@@ -23,6 +23,7 @@ export default class GameController extends GameBase {
 
     // Init Views
     this.mainView = new MainView(
+      this.startGame.bind(this),
       this.restart.bind(this),
       this.pause.bind(this),
       this.resume.bind(this)
@@ -182,6 +183,10 @@ export default class GameController extends GameBase {
     this.mainView.showGameOver();
   }
 
+  beforeStartGame() {
+    this.mainView.showMenuOption();
+  }
+
   doAfterInit() {
     this.doctor.draw();
     this.backgroundAudio.play();
@@ -269,6 +274,6 @@ export default class GameController extends GameBase {
 
     this.backgroundAudio.currentTime = 0;
 
-    this.reSetup();
+    this.startGame();
   }
 }
