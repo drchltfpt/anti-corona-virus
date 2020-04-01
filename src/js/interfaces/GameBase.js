@@ -20,14 +20,20 @@ export default class GameBase {
 
     // Any setup that is required that only runs once before game loads goes here
     if (isInitOk) {
-      // await this.sleep(1000);
       this.beforeStartGame();
     }
   }
 
   beforeStartGame() {}
 
-  startGame() {
+  startGame(arg) {
+    this.beforePlaying(arg);
+    this.playingGame();
+  }
+
+  beforePlaying(arg) {}
+
+  playingGame() {
     this.doAfterInit();
     this.gameLoop();
   }
@@ -43,11 +49,11 @@ export default class GameBase {
     }
   }
 
-  async sleep(miliseconds) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(true);
-      }, miliseconds);
-    });
-  }
+  // async sleep(miliseconds) {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       resolve(true);
+  //     }, miliseconds);
+  //   });
+  // }
 }

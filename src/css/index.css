@@ -54,7 +54,7 @@ canvas {
   margin-top: 60px;
 }
 /** A. ====== PlayView ====== **/
-.main-view {
+.view {
   margin: auto;
   position: absolute;
   top: 0;

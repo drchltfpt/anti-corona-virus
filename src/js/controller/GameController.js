@@ -16,20 +16,20 @@ import User from "../models/User";
 import ImageRepo from "../repos/ImageRepo";
 
 import Helper from "../utils/Helper";
+import LocalStorage from "../utils/LocalStorage";
 
 export default class GameController extends GameBase {
   constructor() {
     super();
 
     // Init Views
-    this.mainView = new MainView(
-      this.startGame.bind(this),
+    this.mainView = new MainView(this.startGame.bind(this));
+
+    this.playView = new PlayView(
       this.restart.bind(this),
       this.pause.bind(this),
       this.resume.bind(this)
     );
-
-    this.playView = new PlayView();
 
     // Init status of game
 
@@ -99,7 +99,7 @@ export default class GameController extends GameBase {
       this.enemyPool.init();
       this.spawnWave();
 
-      this.user = new User(1, 0);
+      this.user = new User("", "", 0);
       Enemy.prototype.user = this.user;
 
       // Start QuadTree for detecting collision
@@ -174,20 +174,21 @@ export default class GameController extends GameBase {
     }
   }
 
-  // Game over
-  gameOver() {
-    this.backgroundAudio.pause();
-    this.gameOverAudio.currentTime = 0;
-    this.gameOverAudio.play();
-
-    this.mainView.showGameOver();
-  }
-
   beforeStartGame() {
     this.mainView.showMenuOption();
   }
 
+  beforePlaying(arg) {
+    this.user.id = arg;
+    this.user.name = arg;
+
+    if (!LocalStorage.containsKey(this.user.id)) {
+      LocalStorage.setItemObject(this.user.id, this.user);
+    }
+  }
+
   doAfterInit() {
+    this.playView.showMeta();
     this.doctor.draw();
     this.backgroundAudio.play();
   }
@@ -200,7 +201,7 @@ export default class GameController extends GameBase {
     this.quadTree.insert(this.enemyPool.getPool());
     this.quadTree.insert(this.enemyBulletPool.getPool());
     this.detectCollision();
-    this.mainView.updateScoreCounter(this.user.score);
+    this.playView.updateScoreCounter(this.user.score);
   }
 
   renderCondition() {
@@ -235,10 +236,22 @@ export default class GameController extends GameBase {
     this.pauseStatus = false;
   }
 
+  // Game over
+  gameOver() {
+    this.backgroundAudio.pause();
+    this.gameOverAudio.currentTime = 0;
+    this.gameOverAudio.play();
+
+    // save highScore of user
+    this._saveHighScoreOfUser();
+
+    this.playView.showGameOver();
+  }
+
   // Restart the game
   restart() {
     this.gameOverAudio.pause();
-    this.mainView.hideGameOver();
+    this.playView.hideGameOver();
 
     this.bgContext.clearRect(
       0,
@@ -274,6 +287,13 @@ export default class GameController extends GameBase {
 
     this.backgroundAudio.currentTime = 0;
 
-    this.startGame();
+    this.playingGame();
+  }
+
+  _saveHighScoreOfUser() {
+    const user = LocalStorage.getItemObject(this.user.id);
+    if (!user || user.score < this.user.score) {
+      LocalStorage.setItemObject(this.user.id, this.user);
+    }
   }
 }

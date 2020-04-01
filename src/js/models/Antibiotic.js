@@ -1,7 +1,7 @@
-import Bullet from "./Bullet";
+import DoctorBullet from "./DoctorBullet";
 import ImageRepo from "../repos/ImageRepo";
 
-export default class Antibiotic extends Bullet {
+export default class Antibiotic extends DoctorBullet {
   constructor(x, y) {
     super(
       x,

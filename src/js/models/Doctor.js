@@ -138,7 +138,7 @@ export default class Doctor extends Drawable {
 
     if (KeyboardController.KEY_STATUS.tab && !this.isColliding) {
       console.log("TAB: ", this.activeBulletTypeIndex);
-      this.changeBulletType();
+      this.changeWeapon();
       KeyboardController.KEY_STATUS.tab = false;
     }
 
@@ -167,7 +167,7 @@ export default class Doctor extends Drawable {
     this.laser.get();
   }
 
-  changeBulletType() {
+  changeWeapon() {
     this.activeBulletTypeIndex =
       (this.activeBulletTypeIndex + 1) % this.bulletTypes.length;
   }

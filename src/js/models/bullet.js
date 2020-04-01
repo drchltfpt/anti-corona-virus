@@ -23,24 +23,7 @@ class Bullet extends Drawable {
    * the bullet is ready to be cleared by the pool, otherwise draws
    * the bullet.
    */
-  draw() {
-    this.context.clearRect(
-      this.x - 1,
-      this.y - 1,
-      this.width + 2,
-      this.height + 2
-    );
-    this.y -= this.speed;
-
-    if (this.isColliding) {
-      return true;
-    } else if (this.y <= 0 - this.height) {
-      return true;
-    } else {
-      this.context.drawImage(this.image, this.x, this.y);
-      return false;
-    }
-  }
+  draw() {}
 
   /*
    * Sets the bullet values
