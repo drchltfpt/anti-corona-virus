@@ -54,7 +54,6 @@ class QuadTree {
    */
   findObjects(returnedObjects, obj) {
     if (typeof obj === "undefined") {
-      console.log("UNDEFINED OBJECT");
       return;
     }
 

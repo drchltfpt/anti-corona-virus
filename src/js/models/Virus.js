@@ -12,6 +12,7 @@ export default class Virus extends Enemy {
       ImageRepo.virus
     );
 
+    this.isDuplicate = false;
     this.collidableWith = ["vaccine"]; // constant
     this.duplicatedWith = ["leukocyte"]; // constant
   }

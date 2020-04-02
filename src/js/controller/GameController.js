@@ -12,10 +12,6 @@ import EnemyBulletPool from "../pool/EnemyBulletPool";
 import QuadTree from "../utils/QuadTree";
 import SoundPool from "../pool/SoundPool";
 import User from "../models/User";
-
-import ImageRepo from "../repos/ImageRepo";
-
-import Helper from "../utils/Helper";
 import LocalStorage from "../utils/LocalStorage";
 
 export default class GameController extends GameBase {
@@ -93,12 +89,12 @@ export default class GameController extends GameBase {
       this.doctor = Doctor.createDoctor();
 
       // Initialize the enemy pool object
-      this.enemyBulletPool = new EnemyBulletPool(50);
+      this.enemyBulletPool = new EnemyBulletPool(60);
       this.enemyBulletPool.init();
 
       Enemy.prototype.enemyBulletPool = this.enemyBulletPool;
 
-      this.enemyPool = new EnemyPool(30);
+      this.enemyPool = new EnemyPool(50);
       this.enemyPool.init();
 
       this.user = new User("", "", 0);
@@ -163,8 +159,11 @@ export default class GameController extends GameBase {
               objects[x].type === "virus" &&
               objects[x].isDuplicatedWith(obj[y])
             ) {
-              this.enemyPool.addMoreEnemy();
               obj[y].isColliding = true;
+              if (!objects[x].isDuplicate && !objects[x].isSlowdown) {
+                objects[x].isDuplicate = true;
+                this.enemyPool.addMoreEnemy();
+              }
             }
           }
         }
@@ -232,7 +231,6 @@ export default class GameController extends GameBase {
     if (this.enemyPool.getPool().length === 0) {
       this.enemyPool.spawnWave();
     }
-    console.log(this.enemyPool.getPool().length, " Length enemy");
   }
 
   pause() {

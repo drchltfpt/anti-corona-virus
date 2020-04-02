@@ -33,7 +33,7 @@ export default class Doctor extends Drawable {
     this.laser.init("laser");
 
     this.fireRate = 15; // constant
-    this.collidableWith = ["enemyBullet"]; // constant
+    this.collidableWith = ["enemyBullet", "virus", "bacterias"]; // constant
     this.type = "doctor"; // constant
 
     this.alive = true;
@@ -138,7 +138,6 @@ export default class Doctor extends Drawable {
     }
 
     if (KeyboardController.KEY_STATUS.tab && !this.isColliding) {
-      console.log("TAB: ", this.activeBulletTypeIndex);
       this.changeWeapon();
       KeyboardController.KEY_STATUS.tab = false;
     }
