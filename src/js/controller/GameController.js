@@ -28,11 +28,13 @@ export default class GameController extends GameBase {
     this.playView = new PlayView(
       this.restart.bind(this),
       this.pause.bind(this),
-      this.resume.bind(this)
+      this.resume.bind(this),
+      this.exitGame.bind(this)
     );
 
     // Init status of game
 
+    this.isGameExit = false;
     this.isGameOver = false;
     this.pauseStatus = false;
 
@@ -110,7 +112,6 @@ export default class GameController extends GameBase {
         height: this.playView.mainCanvas.height
       });
 
-      await Helper.sleep(1000);
       this.checkAudio = window.setInterval(() => {
         this.checkReadyState(resolve);
       }, 1000);
@@ -179,11 +180,18 @@ export default class GameController extends GameBase {
   }
 
   beforePlaying(arg) {
+    // check if user exit game or not
+    if (this.isGameExit) {
+      this.clearStatusGame();
+      this.isGameExit = false;
+      this.isGameOver = false;
+      this.pauseStatus = false;
+    }
     this.user.id = arg;
     this.user.name = arg;
 
-    if (!LocalStorage.containsKey(this.user.id)) {
-      LocalStorage.setItemObject(this.user.id, this.user);
+    if (!LocalStorage.containsUser(this.user.id)) {
+      LocalStorage.addUser(this.user);
     }
   }
 
@@ -205,7 +213,7 @@ export default class GameController extends GameBase {
   }
 
   renderCondition() {
-    return this.doctor.alive;
+    return this.doctor.alive && !this.isGameExit;
   }
 
   isPause() {
@@ -229,11 +237,15 @@ export default class GameController extends GameBase {
   }
 
   pause() {
-    this.pauseStatus = true;
+    if (this.doctor.alive) {
+      this.pauseStatus = true;
+    }
   }
 
   resume() {
-    this.pauseStatus = false;
+    if (this.doctor.alive) {
+      this.pauseStatus = false;
+    }
   }
 
   // Game over
@@ -246,6 +258,19 @@ export default class GameController extends GameBase {
     this._saveHighScoreOfUser();
 
     this.playView.showGameOver();
+  }
+
+  exitGame() {
+    // set renderCondition to false
+    this.isGameExit = true;
+
+    this.backgroundAudio.pause();
+    this.backgroundAudio.currentTime = 0;
+    this.gameOverAudio.pause();
+    this.gameOverAudio.currentTime = 0;
+    // save highScore of user
+    this._saveHighScoreOfUser();
+    this.mainView.showMenuOption();
   }
 
   // Restart the game
@@ -290,10 +315,41 @@ export default class GameController extends GameBase {
     this.playingGame();
   }
 
+  clearStatusGame() {
+    this.bgContext.clearRect(
+      0,
+      0,
+      this.playView.bgCanvas.width,
+      this.playView.bgCanvas.height
+    );
+    this.shipContext.clearRect(
+      0,
+      0,
+      this.playView.shipCanvas.width,
+      this.playView.shipCanvas.height
+    );
+    this.mainContext.clearRect(
+      0,
+      0,
+      this.playView.mainCanvas.width,
+      this.playView.mainCanvas.height
+    );
+
+    this.quadTree.clear();
+
+    this.background.reset();
+
+    // Set the ship to start near the bottom middle of the canvas
+    this.doctor.reset();
+
+    this.enemyPool.reset();
+
+    this.spawnWave();
+    this.enemyBulletPool.reset();
+    this.user.resetScore();
+  }
+
   _saveHighScoreOfUser() {
-    const user = LocalStorage.getItemObject(this.user.id);
-    if (!user || user.score < this.user.score) {
-      LocalStorage.setItemObject(this.user.id, this.user);
-    }
+    LocalStorage.updateScore(this.user);
   }
 }

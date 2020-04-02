@@ -16,7 +16,7 @@
          one forth the screen.) -->
     <canvas id="ship" width="600" height="360"></canvas>
 
-    <div class="view">
+    <div class="view" id="view">
       <div class="menu-option" id="menu-option">
         <div>
           <input
@@ -32,7 +32,14 @@
           </button>
         </div>
         <div class="mt-60">
-          <p id="btn-view-high-score"><u>View high score</u></p>
+          <button id="btn-view-high-score">View high score</button>
+        </div>
+      </div>
+
+      <div class="high-score" id="high-score">
+        <ul id="list-user"></ul>
+        <div class="mt-20">
+          <button id="btn-back">Back</button>
         </div>
       </div>
 
@@ -48,6 +55,9 @@
       <div class="game-over" id="game-over">
         GAME OVER
         <p><button id="btn-restart">Restart</button></p>
+        <p>
+          <i>Press <code>ESC</code> to exit game</i>
+        </p>
       </div>
 
       <div class="loading" id="loading">

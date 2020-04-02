@@ -1,5 +1,5 @@
 class PlayView {
-  constructor(restartGameFunc, pauseGameFunc, resumeGameFunc) {
+  constructor(restartGameFunc, pauseGameFunc, resumeGameFunc, exitGameFunc) {
     this.bgCanvas = document.getElementById("background");
     this.shipCanvas = document.getElementById("ship");
     this.mainCanvas = document.getElementById("main");
@@ -20,6 +20,9 @@ class PlayView {
     this.restartGameFunc = restartGameFunc;
     this.pauseGameFunc = pauseGameFunc;
     this.resumeGameFunc = resumeGameFunc;
+    this.exitGameFunc = exitGameFunc;
+
+    this.gameStatus = "pause"; // pause or resume
 
     this.initEvents();
   }
@@ -30,14 +33,15 @@ class PlayView {
     });
 
     this.btnPause.addEventListener("click", () => {
-      const isPauseMode = this.btnPause.textContent.trim() === "Pause";
-      console.log("isPauseMode ", isPauseMode);
-
-      if (isPauseMode) {
+      if (this.gameStatus === "pause") {
         this.handlePauseGame();
       } else {
         this.handleResumeGame();
       }
+    });
+
+    document.addEventListener("keydown", e => {
+      this.handKeyPressWithGameStatus(e);
     });
   }
 
@@ -62,13 +66,47 @@ class PlayView {
 
   handlePauseGame() {
     this.pauseGameFunc();
-
     this.btnPause.innerHTML = "Resume";
+    this.gameStatus = "resume";
   }
 
   handleResumeGame() {
     this.resumeGameFunc();
     this.btnPause.innerHTML = "Pause";
+    this.gameStatus = "pause";
+  }
+
+  handleExitGame() {
+    this.gameOver.style.display = "none";
+    this.score.style.display = "none";
+    this.pauseGame.style.display = "none";
+    this.btnPause.innerHTML = "Pause";
+    this.gameStatus = "pause";
+    this.exitGameFunc();
+  }
+
+  handKeyPressWithGameStatus(e) {
+    const keyCode = e.keyCode ? e.keyCode : e.charCode;
+    // check User press "p"
+    if (keyCode === 80) {
+      if (this.score.style.display === "block") {
+        e.preventDefault();
+        if (this.gameStatus === "pause") {
+          this.handlePauseGame();
+        } else {
+          this.handleResumeGame();
+        }
+      }
+    }
+    // check User pres "esc"
+    if (keyCode === 27) {
+      e.preventDefault();
+      this.handleExitGame();
+    }
+  }
+
+  static getGameScreen() {
+    return document;
   }
 }
 

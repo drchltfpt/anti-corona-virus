@@ -1,26 +1,36 @@
 class LocalStorage {
-  setItemString(key, value) {
-    localStorage.setItem(key, value);
+  constructor() {
+    this.rootKey = "users";
+  }
+  getListUsers() {
+    return JSON.parse(localStorage.getItem(this.rootKey)) || [];
   }
 
-  setItemObject(key, object) {
-    localStorage.setItem(`user:${key}`, JSON.stringify(object));
+  _updateListUsers(users) {
+    localStorage.setItem(this.rootKey, JSON.stringify(users));
   }
 
-  getItemString(key) {
-    return localStorage.getItem(`user:${key}`);
+  addUser(user) {
+    const users = this.getListUsers();
+    users.push(user);
+    this._updateListUsers(users);
   }
 
-  getItemObject(key) {
-    return JSON.parse(localStorage.getItem(`user:${key}`));
-  }
-
-  containsKey(key) {
-    if (localStorage.getItem(`user:${key}`)) {
-      return true;
-    } else {
-      return false;
+  updateScore(user) {
+    const users = this.getListUsers();
+    for (let u of users) {
+      if (u.id === user.id) {
+        if (user.score > u.score) u.score = user.score;
+        break;
+      }
     }
+    this._updateListUsers(users);
+  }
+
+  containsUser(id) {
+    const users = this.getListUsers();
+    const hasId = users.some(u => u.id === id);
+    return hasId;
   }
 }
 

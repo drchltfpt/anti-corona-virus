@@ -1,3 +1,4 @@
+import PlayView from "../views/PlayView";
 const KEY_CODES = {
   9: "tab",
   32: "space",
@@ -26,16 +27,17 @@ class KeyboardController {
      * key it was.
      */
 
-    document.onkeydown = function(e) {
+    PlayView.getGameScreen().onkeydown = function(e) {
       // Firefox and opera use charCode instead of keyCode to
       // return which key was pressed.
-      var keyCode = e.keyCode ? e.keyCode : e.charCode;
-      if (keyCode === 9) {
-        e.preventDefault();
-        return;
-      }
+      const keyCode = e.keyCode ? e.keyCode : e.charCode;
       if (KEY_CODES[keyCode]) {
         e.preventDefault();
+        // check tab is press down
+        if (keyCode === 9) {
+          return;
+        }
+
         self.KEY_STATUS[KEY_CODES[keyCode]] = true;
       }
     };
@@ -46,15 +48,16 @@ class KeyboardController {
      * it sets teh appropriate direction to false to let us know which
      * key it was.
      */
-    document.onkeyup = function(e) {
-      var keyCode = e.keyCode ? e.keyCode : e.charCode;
-      if (keyCode === 9) {
-        e.preventDefault();
-        self.KEY_STATUS.tab = true;
-        return;
-      }
+    PlayView.getGameScreen().onkeyup = function(e) {
+      const keyCode = e.keyCode ? e.keyCode : e.charCode;
+
       if (KEY_CODES[keyCode]) {
         e.preventDefault();
+        // check tab key is up
+        if (keyCode === 9) {
+          self.KEY_STATUS.tab = true;
+          return;
+        }
         self.KEY_STATUS[KEY_CODES[keyCode]] = false;
       }
     };

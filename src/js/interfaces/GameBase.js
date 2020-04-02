@@ -48,12 +48,4 @@ export default class GameBase {
       }
     }
   }
-
-  // async sleep(miliseconds) {
-  //   return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       resolve(true);
-  //     }, miliseconds);
-  //   });
-  // }
 }

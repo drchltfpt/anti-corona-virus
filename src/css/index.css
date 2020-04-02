@@ -27,6 +27,13 @@ input {
   font-size: 25px;
   font-weight: normal;
 }
+ul {
+  list-style-type: none;
+}
+ul li {
+  margin-top: 20px;
+  padding: 4px 10px;
+}
 canvas {
   padding: 0;
   margin: auto;
@@ -46,6 +53,9 @@ canvas {
 }
 #ship {
   z-index: 0;
+}
+.mt-20 {
+  margin-top: 20px;
 }
 .mt-40 {
   margin-top: 40px;
@@ -102,13 +112,69 @@ canvas {
   font-weight: normal;
   background-color: #a5beab;
 }
-
-.menu-option p {
-  cursor: pointer;
+.menu-option button#btn-view-high-score {
+  background-color: #da6e2f;
+  padding: 2px 4px;
   font-size: 16px;
+  font-weight: normal;
 }
-.menu-option p:hover {
-  color: #c1e769;
+.menu-option button#btn-view-high-score:hover {
+  font-weight: bold;
+}
+
+/* HighScore */
+.high-score {
+  display: none;
+  color: #ffffff;
+  background-color: #414141;
+  height: 100%;
+  padding-top: 20px;
+}
+.high-score ul {
+  height: 250px;
+  max-height: 280px;
+  overflow-y: scroll;
+  margin: auto;
+  width: 300px;
+  max-width: 350px;
+  padding: 0;
+}
+.high-score ul li {
+  display: block;
+  width: 300px;
+  max-width: 350px;
+  background-color: #21b154;
+  border-radius: 10px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.high-score ul li:hover {
+  background-color: #c1e769;
+  color: #000000;
+}
+
+.high-score ul li b,
+.high-score ul li font,
+.high-score ul li span {
+  margin: 0;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.high-score ul li font {
+  width: 180px;
+  max-width: 200px;
+}
+.high-score ul li b {
+  width: 25px;
+  max-width: 35px;
+  font-size: 14px;
+}
+
+.high-score div {
+  text-align: center;
 }
 
 /* Score */
@@ -146,4 +212,9 @@ canvas {
 .game-over button {
   font-size: 20px;
   border: 2px solid #ffffff;
+}
+
+.game-over p i {
+  font-weight: normal;
+  font-size: 14px;
 }

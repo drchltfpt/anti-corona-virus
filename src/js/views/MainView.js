@@ -1,3 +1,5 @@
+import { highScoreController } from "../controller/HighScoreController";
+
 class MainView {
   constructor(startGameFunc) {
     this.startGameFunc = startGameFunc;
@@ -20,6 +22,10 @@ class MainView {
 
     this.btnStartGame.addEventListener("click", () => {
       this.handleStartGame();
+    });
+
+    this.btnViewHighScore.addEventListener("click", () => {
+      this.handleRequestViewHighScore();
     });
   }
 
@@ -48,6 +54,11 @@ class MainView {
     this.menuOption.style.display = "none";
 
     this.startGameFunc(this.username);
+  }
+
+  handleRequestViewHighScore() {
+    this.menuOption.style.display = "none";
+    highScoreController.getListHighScore();
   }
 }
 
