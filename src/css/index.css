@@ -187,6 +187,25 @@ canvas {
   cursor: default;
   display: none;
 }
+/* List weapons */
+.list-weapon {
+  position: absolute;
+  left: 4px;
+  bottom: 25%;
+  display: none;
+}
+
+.list-weapon .weapon {
+  margin-bottom: 5px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: transparent;
+}
+.list-weapon .weapon-active {
+  border: 2px solid #21b154;
+}
 /* Pause game */
 .pause-game {
   position: absolute;

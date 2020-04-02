@@ -72,6 +72,7 @@ export default class Doctor extends Drawable {
     this.alive = true;
     this.isColliding = false;
     this.counter = 0;
+    this.activeBulletTypeIndex = 0;
 
     this.leukocytePool.reset();
     this.antibioticPool.reset();
@@ -170,5 +171,6 @@ export default class Doctor extends Drawable {
   changeWeapon() {
     this.activeBulletTypeIndex =
       (this.activeBulletTypeIndex + 1) % this.bulletTypes.length;
+    this.playView.updateStyleForActiveWeapon(this.activeBulletTypeIndex);
   }
 }

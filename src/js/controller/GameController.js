@@ -49,6 +49,7 @@ export default class GameController extends GameBase {
     Background.prototype.canvasHeight = this.playView.bgCanvas.height;
 
     Doctor.prototype.context = this.shipContext;
+    Doctor.prototype.playView = this.playView;
     Doctor.prototype.canvasWidth = this.playView.shipCanvas.width;
     Doctor.prototype.canvasHeight = this.playView.shipCanvas.height;
 

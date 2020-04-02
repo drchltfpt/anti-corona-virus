@@ -14,6 +14,8 @@ class PlayView {
     this.score = document.getElementById("score");
     this.scoreCounter = document.getElementById("score-counter");
 
+    this.listWeapon = document.getElementById("list-weapon");
+
     this.gameOver = document.getElementById("game-over");
     this.btnRestart = document.getElementById("btn-restart");
 
@@ -29,7 +31,7 @@ class PlayView {
 
   initEvents() {
     this.btnRestart.addEventListener("click", () => {
-      this.restartGameFunc();
+      this.handleRestartGame();
     });
 
     this.btnPause.addEventListener("click", () => {
@@ -45,9 +47,19 @@ class PlayView {
     });
   }
 
+  updateStyleForActiveWeapon(activeIndex) {
+    const divWeapons = this.listWeapon.querySelectorAll(".weapon");
+    for (let div of divWeapons) {
+      div.classList.remove("weapon-active");
+    }
+
+    divWeapons[activeIndex].classList.add("weapon-active");
+  }
+
   showMeta() {
     this.score.style.display = "block";
     this.pauseGame.style.display = "block";
+    this.listWeapon.style.display = "block";
   }
 
   updateScoreCounter(score) {
@@ -62,6 +74,11 @@ class PlayView {
   hideGameOver() {
     this.gameOver.style.display = "none";
     this.pauseGame.style.display = "block";
+  }
+
+  handleRestartGame() {
+    this.updateStyleForActiveWeapon(0);
+    this.restartGameFunc();
   }
 
   handlePauseGame() {
@@ -79,9 +96,11 @@ class PlayView {
   handleExitGame() {
     this.gameOver.style.display = "none";
     this.score.style.display = "none";
+    this.listWeapon.style.display = "none";
     this.pauseGame.style.display = "none";
     this.btnPause.innerHTML = "Pause";
     this.gameStatus = "pause";
+    this.updateStyleForActiveWeapon(0);
     this.exitGameFunc();
   }
 
