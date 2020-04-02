@@ -20,7 +20,7 @@ class ImageRepo {
   initSrc() {
     // Set images src
     this.background.src = "./imgs/bg.png";
-    this.spaceship.src = "./imgs/ship.png";
+    this.spaceship.src = "./imgs/doctor.png";
     this.bullet.src = "./imgs/vaccine.png";
     this.vitaminC.src = "./imgs/lime.png"
     this.antibiotic.src = "./imgs/antibiotic.png";

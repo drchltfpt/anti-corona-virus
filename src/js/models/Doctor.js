@@ -45,7 +45,7 @@ export default class Doctor extends Drawable {
     const shipStartX =
       Doctor.prototype.canvasWidth / 2 - ImageRepo.spaceship.width;
     const shipStartY =
-      (Doctor.prototype.canvasHeight / 4) * 3 + ImageRepo.spaceship.height * 2;
+      (Doctor.prototype.canvasHeight / 4) * 3 + ImageRepo.spaceship.height;
 
     return new Doctor(
       shipStartX,
@@ -65,7 +65,7 @@ export default class Doctor extends Drawable {
   reset() {
     const shipStartX = this.canvasWidth / 2 - ImageRepo.spaceship.width;
     const shipStartY =
-      (this.canvasHeight / 4) * 3 + ImageRepo.spaceship.height * 2;
+      (this.canvasHeight / 4) * 3 + ImageRepo.spaceship.height;
 
     this.x = shipStartX;
     this.y = shipStartY;
