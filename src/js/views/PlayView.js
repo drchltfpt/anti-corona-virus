@@ -62,6 +62,11 @@ class PlayView {
     this.listWeapon.style.display = "block";
   }
 
+  isGamePlaying() {
+    // Game is playing only when pauseGame block is displayed
+    return this.pauseGame.style.display === "block";
+  }
+
   updateScoreCounter(score) {
     this.scoreCounter.innerHTML = score;
   }
@@ -108,7 +113,7 @@ class PlayView {
     const keyCode = e.keyCode ? e.keyCode : e.charCode;
     // check User press "p"
     if (keyCode === 80) {
-      if (this.score.style.display === "block") {
+      if (this.isGamePlaying()) {
         e.preventDefault();
         if (this.gameStatus === "pause") {
           this.handlePauseGame();
@@ -118,7 +123,7 @@ class PlayView {
       }
     }
     // check User pres "esc"
-    if (keyCode === 27) {
+    else if (keyCode === 27) {
       e.preventDefault();
       this.handleExitGame();
     }

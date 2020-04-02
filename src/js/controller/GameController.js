@@ -100,7 +100,6 @@ export default class GameController extends GameBase {
 
       this.enemyPool = new EnemyPool(30);
       this.enemyPool.init();
-      this.spawnWave();
 
       this.user = new User("", "", 0);
       Enemy.prototype.user = this.user;
@@ -146,32 +145,29 @@ export default class GameController extends GameBase {
       for (let y = 0; y < obj.length; y++) {
         // DETECT COLLISION ALGORITHM
         if (
-          objects[x].isCollidableWith(obj[y]) &&
           objects[x].x < obj[y].x + obj[y].width &&
           objects[x].x + objects[x].width > obj[y].x &&
           objects[x].y < obj[y].y + obj[y].height &&
           objects[x].y + objects[x].height > obj[y].y
         ) {
-          objects[x].isColliding = true;
-          obj[y].isColliding = true;
-        }
-      }
-    }
-  }
+          if (objects[x].isCollidableWith(obj[y])) {
+            objects[x].isColliding = true;
+            obj[y].isColliding = true;
+          } else if (["virus", "bacterias"].includes(objects[x].type)) {
+            if (objects[x].isSlowdownWith(obj[y])) {
+              objects[x].slowdown();
+              obj[y].isColliding = true;
+            }
 
-  // Spawn a new wave of enemies
-  spawnWave() {
-    let height = ImageRepo.virus.height;
-    let width = ImageRepo.virus.width;
-    let x = 100;
-    let y = -height;
-    let spacer = y * 1.5;
-    for (let i = 1; i <= 18; i++) {
-      this.enemyPool.get(x, y, 2);
-      x += width + 25;
-      if (i % 6 == 0) {
-        x = 100;
-        y += spacer;
+            if (
+              objects[x].type === "virus" &&
+              objects[x].isDuplicatedWith(obj[y])
+            ) {
+              this.enemyPool.addMoreEnemy();
+              obj[y].isColliding = true;
+            }
+          }
+        }
       }
     }
   }
@@ -200,6 +196,7 @@ export default class GameController extends GameBase {
     this.playView.showMeta();
     this.doctor.draw();
     this.backgroundAudio.play();
+    this.enemyPool.spawnWave();
   }
 
   beforeRender() {
@@ -233,8 +230,9 @@ export default class GameController extends GameBase {
 
     // No more enemies
     if (this.enemyPool.getPool().length === 0) {
-      this.spawnWave();
+      this.enemyPool.spawnWave();
     }
+    console.log(this.enemyPool.getPool().length, " Length enemy");
   }
 
   pause() {
@@ -315,7 +313,6 @@ export default class GameController extends GameBase {
 
     this.enemyPool.reset();
 
-    this.spawnWave();
     this.enemyBulletPool.reset();
     this.user.resetScore();
   }

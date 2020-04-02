@@ -14,6 +14,10 @@ class Enemy extends Drawable {
 
     this.alive = false; // Is true if the bullet is currently in use
     this.chance = 0;
+
+    this.isSlowdown = false;
+    this.slowdownRate = 10;
+    this.slowdownWith = ["vitaminC"]; // constant
   }
 
   reset(x, y) {
@@ -21,6 +25,24 @@ class Enemy extends Drawable {
     this.y = y;
     this.alive = false;
     this.chance = 0;
+    this.isSlowdown = false;
+    this.slowdownRate = 10;
+  }
+
+  isSlowdownWith(object) {
+    return this.slowdownWith.includes(object.type);
+  }
+
+  slowdown() {
+    if (!this.isSlowdown) this.isSlowdown = true;
+
+    if (this.percentFire > 0.005) {
+      this.percentFire -= 0.001;
+    }
+
+    if (this.speed > 0.5) {
+      this.speed -= 0.25;
+    }
   }
 
   /*
@@ -57,7 +79,16 @@ class Enemy extends Drawable {
     }
 
     if (!this.isColliding) {
-      this.context.drawImage(this.image, this.x, this.y);
+      if (this.isSlowdown) {
+        if (this.slowdownRate >= 1) {
+          this.context.drawImage(this.image, this.x, this.y);
+          this.slowdownRate = 0;
+        } else {
+          this.slowdownRate += 1;
+        }
+      } else {
+        this.context.drawImage(this.image, this.x, this.y);
+      }
 
       // Enemy has a chance to shoot every movement
       this.chance = Math.floor(Math.random() * 101);
@@ -94,6 +125,8 @@ class Enemy extends Drawable {
     this.speedY = 0;
     this.alive = false;
     this.isColliding = false;
+    this.isSlowdown = false;
+    this.slowdownRate = 10;
   }
 }
 

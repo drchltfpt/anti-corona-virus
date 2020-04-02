@@ -13,5 +13,17 @@ export default class Virus extends Enemy {
     );
 
     this.collidableWith = ["vaccine"]; // constant
+    this.duplicatedWith = ["leukocyte"]; // constant
+  }
+
+  static getSize() {
+    return {
+      width: ImageRepo.virus.width,
+      height: ImageRepo.virus.height
+    };
+  }
+
+  isDuplicatedWith(object) {
+    return this.duplicatedWith.includes(object.type);
   }
 }
