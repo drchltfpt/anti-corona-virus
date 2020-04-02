@@ -278,37 +278,7 @@ export default class GameController extends GameBase {
     this.gameOverAudio.pause();
     this.playView.hideGameOver();
 
-    this.bgContext.clearRect(
-      0,
-      0,
-      this.playView.bgCanvas.width,
-      this.playView.bgCanvas.height
-    );
-    this.shipContext.clearRect(
-      0,
-      0,
-      this.playView.shipCanvas.width,
-      this.playView.shipCanvas.height
-    );
-    this.mainContext.clearRect(
-      0,
-      0,
-      this.playView.mainCanvas.width,
-      this.playView.mainCanvas.height
-    );
-
-    this.quadTree.clear();
-
-    this.background.reset();
-
-    // Set the ship to start near the bottom middle of the canvas
-    this.doctor.reset();
-
-    this.enemyPool.reset();
-
-    this.spawnWave();
-    this.enemyBulletPool.reset();
-    this.user.resetScore();
+    this.clearStatusGame();
 
     this.backgroundAudio.currentTime = 0;
 

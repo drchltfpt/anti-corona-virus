@@ -2,7 +2,7 @@ import LocalStorage from "../utils/LocalStorage";
 import { highScoreView } from "../views/HighScoreView";
 
 export default class HighScoreController {
-  getListHighScore() {
+  showListHighScore() {
     const users = LocalStorage.getListUsers();
     this.sortUsers(users);
 

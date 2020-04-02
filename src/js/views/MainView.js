@@ -58,7 +58,7 @@ class MainView {
 
   handleRequestViewHighScore() {
     this.menuOption.style.display = "none";
-    highScoreController.getListHighScore();
+    highScoreController.showListHighScore();
   }
 }
 
