@@ -60,8 +60,6 @@ class Enemy extends Drawable {
     this.leftEdge = this.x - 90;
     this.rightEdge = this.x + 90;
     this.bottomEdge = this.y + this.height * 6;
-
-    this.isChangeBottomEdge = false;
   }
 
   cloneAttr(enemy) {
@@ -72,7 +70,6 @@ class Enemy extends Drawable {
 
   changeBottomEdge(numEnemy) {
     if (numEnemy % 6 === 1) {
-      this.isChangeBottomEdge = true;
       this.bottomEdge += this.height;
       this.speedX = 0;
       this.speedY = this.speed;
@@ -88,13 +85,10 @@ class Enemy extends Drawable {
     this.x += this.speedX;
     this.y += this.speedY;
 
-    if (
-      this.x <= this.leftEdge ||
-      this.x >= this.rightEdge + this.width ||
-      !this.leftEdge ||
-      !this.rightEdge
-    ) {
-      this.speedX *= -1;
+    if (this.x <= this.leftEdge) {
+      this.speedX = this.speed;
+    } else if (this.x >= this.rightEdge + this.width) {
+      this.speedX = -this.speed;
     }
     if (this.y >= this.bottomEdge) {
       this.speedX = -1.5;
