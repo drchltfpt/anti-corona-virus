@@ -71,10 +71,10 @@ class EnemyPool extends Pool {
     let startX = this.pool[5].x || Math.random() * 400 + 50;
     let startY = this.pool[5].y || Math.random() * 100 + 30;
     let bottomEdge = this.pool[5].bottomEdge || 200;
-    if (this.numberOfEnemyAttacking % 6 == 0) {
-      startY += this.spacer;
-      bottomEdge += this.spacer;
-    }
+    // if (this.numberOfEnemyAttacking % 6 == 0) {
+    startY += this.spacer;
+    bottomEdge += this.spacer;
+    // }
 
     const flag = this.getFirstVirusNotAlive(
       startX,

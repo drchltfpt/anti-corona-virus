@@ -89,12 +89,12 @@ export default class GameController extends GameBase {
       this.doctor = Doctor.createDoctor();
 
       // Initialize the enemy pool object
-      this.enemyBulletPool = new EnemyBulletPool(60);
+      this.enemyBulletPool = new EnemyBulletPool(40);
       this.enemyBulletPool.init();
 
       Enemy.prototype.enemyBulletPool = this.enemyBulletPool;
 
-      this.enemyPool = new EnemyPool(50);
+      this.enemyPool = new EnemyPool(30);
       this.enemyPool.init();
 
       this.user = new User("", "", 0);
