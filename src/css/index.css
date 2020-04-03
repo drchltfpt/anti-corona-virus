@@ -63,7 +63,8 @@ canvas {
 .mt-60 {
   margin-top: 60px;
 }
-/** A. ====== PlayView ====== **/
+
+/** ====== PlayView ====== **/
 .view {
   margin: auto;
   position: absolute;
@@ -112,13 +113,21 @@ canvas {
   font-weight: normal;
   background-color: #a5beab;
 }
-.menu-option button#btn-view-high-score {
+.menu-option button#btn-view-high-score,
+.menu-option button#btn-view-instruction {
   background-color: #da6e2f;
   padding: 2px 4px;
   font-size: 16px;
   font-weight: normal;
 }
-.menu-option button#btn-view-high-score:hover {
+
+.menu-option button#btn-view-instruction {
+  background-color: transparent;
+  border: 1px solid #fff;
+}
+
+.menu-option button#btn-view-high-score:hover,
+.menu-option button#btn-view-instruction:hover {
   font-weight: bold;
 }
 
@@ -175,6 +184,27 @@ canvas {
 
 .high-score div {
   text-align: center;
+}
+
+/* Instruction */
+.instruction {
+  display: none;
+  color: #ffffff;
+  background-color: #414141;
+  height: 100%;
+  padding: 8%;
+}
+
+.instruction h2 {
+  text-align: center;
+}
+
+.instruction code {
+  background: #bebebe;
+  padding: 2px 3px;
+  font-size: 14px;
+  border-radius: 2px;
+  color: #414141;
 }
 
 /* Score */

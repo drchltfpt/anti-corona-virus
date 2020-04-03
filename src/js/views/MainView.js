@@ -11,6 +11,12 @@ class MainView {
     this.ipUsername = document.getElementById("ip-username");
     this.btnStartGame = document.getElementById("btn-startGame");
     this.btnViewHighScore = document.getElementById("btn-view-high-score");
+    this.btnInstruction = document.getElementById("btn-view-instruction");
+
+    this.gameInstruction = document.getElementById("instruction");
+    this.btnBackFromInstruction = document.getElementById(
+      "btn-back-from-instruction"
+    );
 
     this.initEvents();
   }
@@ -26,6 +32,14 @@ class MainView {
 
     this.btnViewHighScore.addEventListener("click", () => {
       this.handleRequestViewHighScore();
+    });
+
+    this.btnInstruction.addEventListener("click", () => {
+      this.handleViewInstruction();
+    });
+
+    this.btnBackFromInstruction.addEventListener("click", () => {
+      this.handleBackToMenuOption();
     });
   }
 
@@ -59,6 +73,16 @@ class MainView {
   handleRequestViewHighScore() {
     this.menuOption.style.display = "none";
     highScoreController.showListHighScore();
+  }
+
+  handleViewInstruction() {
+    this.menuOption.style.display = "none";
+    this.gameInstruction.style.display = "block";
+  }
+
+  handleBackToMenuOption() {
+    this.menuOption.style.display = "block";
+    this.gameInstruction.style.display = "none";
   }
 }
 
