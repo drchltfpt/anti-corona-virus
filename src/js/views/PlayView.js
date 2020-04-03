@@ -51,7 +51,6 @@ class PlayView {
     });
 
     this.btnCancelExit.addEventListener("click", () => {
-      this.gameExitConfirm.style.display = "none";
       this.handleResumeGame();
     });
 
@@ -109,6 +108,8 @@ class PlayView {
     this.resumeGameFunc();
     this.btnPause.innerHTML = "Pause";
     this.gameStatus = "pause";
+    if (this.gameExitConfirm.style.display === "block")
+      this.gameExitConfirm.style.display = "none";
   }
 
   handleExitGame() {
