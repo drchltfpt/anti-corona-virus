@@ -237,3 +237,14 @@ canvas {
   font-weight: normal;
   font-size: 14px;
 }
+/* Game exit */
+.confirm-exit {
+  display: none;
+  text-align: center;
+  margin-top: 20%;
+
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 30px;
+  cursor: default;
+}

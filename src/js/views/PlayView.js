@@ -19,6 +19,10 @@ class PlayView {
     this.gameOver = document.getElementById("game-over");
     this.btnRestart = document.getElementById("btn-restart");
 
+    this.gameExitConfirm = document.getElementById("confirm-exit");
+    this.btnOkExit = document.getElementById("btn-ok-exit");
+    this.btnCancelExit = document.getElementById("btn-cancel-exit");
+
     this.restartGameFunc = restartGameFunc;
     this.pauseGameFunc = pauseGameFunc;
     this.resumeGameFunc = resumeGameFunc;
@@ -40,6 +44,15 @@ class PlayView {
       } else {
         this.handleResumeGame();
       }
+    });
+
+    this.btnOkExit.addEventListener("click", () => {
+      this.handleExitGame();
+    });
+
+    this.btnCancelExit.addEventListener("click", () => {
+      this.gameExitConfirm.style.display = "none";
+      this.handleResumeGame();
     });
 
     document.addEventListener("keydown", e => {
@@ -99,6 +112,7 @@ class PlayView {
   }
 
   handleExitGame() {
+    this.gameExitConfirm.style.display = "none";
     this.gameOver.style.display = "none";
     this.score.style.display = "none";
     this.listWeapon.style.display = "none";
@@ -125,7 +139,13 @@ class PlayView {
     // check User pres "esc"
     else if (keyCode === 27) {
       e.preventDefault();
-      this.handleExitGame();
+      if (this.gameOver.style.display === "block") {
+        this.handleExitGame();
+      } else {
+        this.gameExitConfirm.style.display = "block";
+        // this.handleExitGame();
+        this.handlePauseGame();
+      }
     }
   }
 
